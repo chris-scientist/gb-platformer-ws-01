@@ -7,6 +7,7 @@ baseurl: ""
 url: "https://chris-scientist.github.io/gb-platformer-ws-01"
 wip: true
 comment-link: "https://chris-scientist.github.io"
+timezone: Europe/Paris
 
 # Build settings
 markdown: kramdown
