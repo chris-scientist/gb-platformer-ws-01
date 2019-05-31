@@ -1,0 +1,38 @@
+---
+layout: default
+---
+
+<header class="masthead mb-auto">
+  <div class="inner">
+    <h3 class="masthead-brand">{{ site.title }}</h3>
+    <nav class="nav nav-masthead justify-content-center">
+      <a class="nav-link" href="{{ site.url }}">Accueil</a>
+      <a class="nav-link" href="{{ site.url }}//about/">A propos</a>
+    </nav>
+  </div>
+</header>
+
+<main role="main" class="inner cover">
+  <p style="text-align: center" >[ <a href="{{ site.url }}{{ page.link-other-lang }}" style="font-size: small" >{% if page.lang == 'fr' %}English{% else %}Français{% endif %}</a> ]</p>
+
+  <p style="font-size: small;text-align: left;margin-top: 10px;" >
+    {{ site.data.translations['update_date'][page.lang] }}
+    {% include date.html date="now" %}
+    {{ site.data.translations['update_time'][page.lang] }}
+    {{ "now" | date: "%H:%M" }}
+  </p>
+
+  <nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    {% if page.lang == 'fr' %}
+    {% include fr.menu.html %}
+    {% else %}
+    {% include en.menu.html %}
+    {% endif %}
+  </ol>
+  </nav>
+
+  {{ content }}
+
+  <a href="{{ site.url }}{{ page.next }}" role="button" class="btn btn-secondary" >Lire la suite &rsaquo;&rsaquo;</a>
+</main>

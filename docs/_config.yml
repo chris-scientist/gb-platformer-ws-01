@@ -1,0 +1,13 @@
+
+title: "Platformer : les bases"
+description: >-
+  Premier workshop sur les platformer, ce dernier aborde les bases du jeu.
+  Ce workshop est réalisé pour la console Gamebuino META.
+baseurl: ""
+url: ""
+wip: true
+comment-link: "https://chris-scientist.github.io"
+
+# Build settings
+markdown: kramdown
+
