@@ -13,7 +13,7 @@ lang: fr
 
 Pour cette quatrième étape nous allons implémenter les interactions avec le monde. Il y a aura une clé à ramasser, celle-ci permettra d'ouvrir une porte.
 
-*Je vous invite à télécharger [le code](https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v3.0.zip) qui est le résultat de la troisième étape afin de partir sur des bases communes.*
+*Je vous invite à télécharger <a href="https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v3.0.zip" class="external-link" >le code</a> qui est le résultat de la troisième étape afin de partir sur des bases communes.*
 
 ## Les objets
 
@@ -71,6 +71,7 @@ Dans `Object.h`, créons la structure pour nos objets :
 #ifndef PLATFORMER_OBJECT
 #define PLATFORMER_OBJECT
 
+#include <Gamebuino-Meta.h>
 #include "Constants.h"
 
 struct Object {
@@ -87,12 +88,16 @@ Dans `Object.h`, ajoutons une fonction pour créer des objets, dont le prototype
 
 <div class="filename" >Object.h</div>
 ```
-Object createObject(int8_t aX, int8_t aY, uint8_t aType, uint8_t aState);
+Object createObject(
+  int8_t aX, int8_t aY, 
+  uint8_t aType, 
+  uint8_t aState
+);
 ```
 
 Dans `Object.cpp`, définissons la fonction `createObject` :
 
-<div class="filename" >Object.cpp</div>
+<div class="filename" >Object.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
 Object createObject(int8_t aX, int8_t aY, uint8_t aType, uint8_t aState) {
   Object anObject;
@@ -129,14 +134,49 @@ Ensuite, en dehors des fonctions `setup` et `loop`, déclarons un tableau d'obje
 
 <div class="filename" >GBPlatformer01.ino</div>
 ```
+// Autres includes
+#include "Object.h"
+
+// Autres variables globales
 Object setOfObjects[NB_OF_OBJECTS];
+
+void setup() {
+  // ...
+}
+
+void loop() {
+  // ...
+}
 ```
 
 Enfin, initialisons nos objets dans l'état `LAUNCH_PLAY_STATE` :
 
-<div class="filename" >GBPlatformer01.ino</div>
+<div class="filename" >GBPlatformer01.ino <span>/!\ Scroll horizontal /!\</span></div>
 ```
-initObjects(setOfObjects); // ....... on réinitialise les objets
+void loop() {
+  // boucle d'attente
+  gb.waitForUpdate();
+
+  // effacer l'écran
+  gb.display.clear();
+
+  switch(stateOfGame) {
+    case HOME_STATE:
+      stateOfGame = paintMenu();
+      break;
+    case LAUNCH_PLAY_STATE:
+      initObjects(setOfObjects); // ....... on réinitialise les objets
+      initPlatforms(setOfPlatforms); // ... on réinitialise les plateformes
+      initCharacter(hero);
+      stateOfGame = PLAY_STATE;
+      break;
+    case PLAY_STATE:
+      // ...
+      break;
+    default:
+      gb.display.println("Votre message");
+  }
+}
 ```
 
 ### Affichage des objets
@@ -147,12 +187,15 @@ Dans `Display.h`, ajoutons le prototype de la fonction `paintKey` :
 
 <div class="filename" >Display.h</div>
 ```
-void paintKey(const int8_t aX, const int8_t aY, const uint8_t aState);
+void paintKey(
+  const int8_t aX, const int8_t aY, 
+  const uint8_t aState
+);
 ```
 
 Dans `Display.cpp`, définissons la fonction `paintKey` :
 
-<div class="filename" >Display.cpp</div>
+<div class="filename" >Display.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
 // Réalise l'affichage de la clé
 void paintKey(const int8_t aX, const int8_t aY, const uint8_t aState) {
@@ -166,12 +209,15 @@ Dans `Display.h`, ajoutons le prototype de la fonction `paintDoor` :
 
 <div class="filename" >Display.h</div>
 ```
-void paintDoor(const int8_t aX, const int8_t aY, const uint8_t aState);
+void paintDoor(
+  const int8_t aX, const int8_t aY, 
+  const uint8_t aState
+);
 ```
 
 Dans `Display.cpp`, définissons la fonction `paintDoor` :
 
-<div class="filename" >Display.cpp</div>
+<div class="filename" >Display.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
 // Réalise l'affichage de la porte
 void paintDoor(const int8_t aX, const int8_t aY, const uint8_t aState) {
@@ -228,12 +274,16 @@ Modifions, dans `Display.h`, le prototype de la fonction `paint` pour y passer n
 
 <div class="filename" >Display.h</div>
 ```
-void paint(Character &aCharacter, Platform * aSetOfPlatforms, Object * aSetOfObjects);
+void paint(
+  Character &aCharacter, 
+  Platform * aSetOfPlatforms, 
+  Object * aSetOfObjects
+);
 ```
 
 Modifions, dans `Display.cpp`, la fonction `paint` :
 
-<div class="filename" >Display.cpp</div>
+<div class="filename" >Display.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
 // Réalise tout l'affichage
 void paint(Character &aCharacter, Platform * aSetOfPlatforms, Object * aSetOfObjects) {
@@ -247,7 +297,29 @@ Dans le programme principal, dans l'état `PLAY_STATE`, modifions l'appel de la 
 
 <div class="filename" >GBPlatformer01.ino</div>
 ```
-paint(hero, setOfPlatforms, setOfObjects);
+void loop() {
+  // boucle d'attente
+  gb.waitForUpdate();
+
+  // effacer l'écran
+  gb.display.clear();
+
+  switch(stateOfGame) {
+    case HOME_STATE:
+      stateOfGame = paintMenu();
+      break;
+    case LAUNCH_PLAY_STATE:
+      // ...
+      break;
+    case PLAY_STATE:
+      // ...
+
+      paint(hero, setOfPlatforms, setOfObjects);
+      break;
+    default:
+      gb.display.println("Votre message");
+  }
+)
 ```
 
 Vous pouvez téléverser votre programme sur votre console, et lancer une partie. Il y a deux nouveaux rectangles : le jaune représente une clé et le gris une porte fermée. Si vous allez ramasser la clé, rien ne se passe, c'est normal ! Nous allons coder les interactions avec les objets dans la suite de cette étape.
@@ -291,14 +363,17 @@ Crééons un fichier nommé `Interactions.h`, il permettra de gérer les interac
 #include "Character.h"
 #include "Object.h"
 
-const uint8_t isContactWithObject(const Character &aCharacter, const Object &anObject);
+const uint8_t isContactWithObject(
+  const Character &aCharacter, 
+  const Object &anObject
+);
 
 #endif
 ```
 
 Dans `Interactions.cpp`, ajoutons la définition de la fonction `isContactWithObject` :
 
-<div class="filename" >Interactions.cpp</div>
+<div class="filename" >Interactions.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
 // Indique s'il y a une collision avec l'objet en paramètre
 const uint8_t isContactWithObject(const Character &aCharacter, const Object &anObject) {
@@ -338,12 +413,15 @@ Dans `Interactions.h`, ajoutons le prototype de la fonction `interactionsWithWor
 
 <div class="filename" >Interactions.h</div>
 ```
-void interactionsWithWorld(Character &aCharacter, Object * aSetOfObjects);
+void interactionsWithWorld(
+  Character &aCharacter, 
+  Object * aSetOfObjects
+);
 ```
 
 Dans `Interactions.cpp`, définissons la fonction `interactionsWithWorld` :
 
-<div class="filename" >Interactions.cpp</div>
+<div class="filename" >Interactions.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
 // Réalise les interactions avec les objets s'il y a collision
 void interactionsWithWorld(Character &aCharacter, Object * aSetOfObjects) {
@@ -371,7 +449,31 @@ Enfin, dans l'état `PLAY_STATE`, avant d'afficher le jeu, ajoutons l'appel de l
 
 <div class="filename" >GBPlatformer01.ino</div>
 ```
-interactionsWithWorld(hero, setOfObjects);
+void loop() {
+  // boucle d'attente
+  gb.waitForUpdate();
+
+  // effacer l'écran
+  gb.display.clear();
+
+  switch(stateOfGame) {
+    case HOME_STATE:
+      stateOfGame = paintMenu();
+      break;
+    case LAUNCH_PLAY_STATE:
+      // ...
+      break;
+    case PLAY_STATE:
+      // ...
+
+      interactionsWithWorld(hero, setOfObjects);
+      
+      paint(hero, setOfPlatforms, setOfObjects);
+      break;
+    default:
+      gb.display.println("Votre message");
+  }
+)
 ```
 
 Téléversez votre programme sur votre console, et constatez maintenant que vous pouvez ramasser la clé puis ouvrir la porte.
@@ -380,7 +482,7 @@ Téléversez votre programme sur votre console, et constatez maintenant que vous
 
 Vous voici arrivé à la fin de cette quatrième étape : nous avons créé, affiché et interagi avec les objets.
 
-Si vous avez terminé ou si vous rencontrez des problèmes vous pouvez télécharger la solution [ici](https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v4.0.zip).
+Si vous avez terminé ou si vous rencontrez des problèmes vous pouvez télécharger la solution <a href="https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v4.0.zip" class="external-link" >ici</a>.
 
 Dans la prochaine étape, c'est-à-dire la cinquième, nous aborderons la gestion de la partie et nous ajouterons un chronomètre.
 
