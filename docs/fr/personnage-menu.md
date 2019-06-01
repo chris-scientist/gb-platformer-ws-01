@@ -7,7 +7,7 @@ link-other-lang: /en/introduction/
 lang: fr
 ---
 
-# Etape 1 - le personnage : création, affichage et gestion d'un menu
+# Etape 1 - Le personnage : création, affichage et gestion d'un menu
 
 
 ## Introduction
@@ -17,7 +17,7 @@ Dans cette étape, nous allons créer un personnage, l'afficher et nous verrons 
 
 ## Programme basique
 
-Avant de créer le personnage, il faut écrire le programme de base comme nous l'avons vu dans l'[étape 2 de TapTap, un jeu ou il faut aller très vite !](https://gamebuino.com/fr/academy/workshop/tap-tap-how-fast-can-you-tap/inputs-update-draw)
+Avant de créer le personnage, il faut écrire le programme de base comme nous l'avons vu dans l'<a href="https://gamebuino.com/fr/academy/workshop/tap-tap-how-fast-can-you-tap/inputs-update-draw" class="external-link" >étape 2 de TapTap, un jeu ou il faut aller très vite</a> !
 
 Pour rappel, il nous faut :
 * inclure le fichier `Gamebuino-Meta.h` en début de code
@@ -40,7 +40,7 @@ void setup() {
 
 void loop() {
   // boucle d'attente
-  while(!gb.update());
+  gb.waitForUpdate();
 
 
   // ENTREES //
@@ -68,7 +68,7 @@ void loop() {
 
 Téléversez votre programme pour constater l'affichage du message.
 
-Vous pouvez télécharger [ici le programme de base](https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v0.0.zip).
+Vous pouvez télécharger <a href="https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v0.0.zip" class="external-link" >ici le programme de base</a>.
 
 ## Le personnage
 
@@ -81,21 +81,28 @@ Bien que nous ne ferons qu'afficher ce personnage sans gérer ses mouvements dan
 * de sa position verticale également gérée avec un entier `y` ;
 * de la direction de déplacement du personnage gérée avec un booléen, `true` pour aller à gauche et `false` pour aller à droite.
 
-Pour représenter le personnage nous allons utiliser une structure (struct), comme nous l'avons vu dans le tutoriel : [Structurer les objets de votre programme](https://gamebuino.com/fr/creations/structurer-les-objets-de-votre-programme).
+Pour représenter le personnage nous allons utiliser une structure (struct), comme nous l'avons vu dans le tutoriel : <a href="https://gamebuino.com/fr/creations/structurer-les-objets-de-votre-programme" class="external-link" >Structurer les objets de votre programme</a>.
 
-Nous allons appeler cette structure Character et nous allons la créer dans le fichier d'entête (ou header) `Character.h`.
+Nous allons appeler cette structure `Character` et nous allons la créer dans le fichier d'entête (ou header) `Character.h`.
 
-> Un fichier d'entête est l'endroit idéal pour définir le prototype des fonctions, les types personnalisés, les structures et les classes. 
+> Pourquoi mets-tu une majuscule au nom de la structure ? Il s'agit d'une convention de développeur. Si votre structure comporte plusieurs mots, par exemple une structure qui stocke un meilleur score : nous la nommerons `HighScore` (chaque nouveau mot commençant ainsi par une majuscule).
+
+> Un fichier d'entête est l'endroit idéal pour définir le prototype des fonctions, les types personnalisés et les structures. 
 
 Si vous ne voyez pas comment implémenter la structure du personnage ou si vous avez réussi et que vous souhaitez comparer votre code, voici la structure que nous utiliserons au cours de ce workshop :
 
 <div class="filename" >Character.h</div>
 ```
+#ifndef PLATFORMER_CHARACTER
+#define PLATFORMER_CHARACTER
+
 struct Character {
   int8_t x;
   int8_t y;
   bool toTheLeft;
 };
+
+#endif
 ```
 
 
@@ -114,8 +121,10 @@ Créons un fichier `Constants.h`, et ajoutons-y les lignes suivantes :
 
 <div class="filename" >Constants.h</div>
 ```
-#ifndef PLATFORMER_CONSTANTES
-#define PLATFORMER_CONSTANTES
+#ifndef PLATFORMER_CONSTANTS
+#define PLATFORMER_CONSTANTS
+
+#include <Gamebuino-Meta.h>
 
 // Pour un personnage de 8 pixels de haut sur 6 pixels de large
 const uint8_t WIDTH_HERO = 6;
@@ -141,8 +150,11 @@ void initCharacter(Character &aCharacter);
 
 Le code de cette fonction, à placer dans `Character.cpp`, est le suivant :
 
-<div class="filename" >Character.cpp</div>
+<div class="filename" >Character.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
+#include "Character.h"
+#include "Constants.h"
+
 void initCharacter(Character &aCharacter) {
   // on force la position intiale du héro au milieu de l'écran et plaqué au sol
   aCharacter.x = 40;
@@ -152,8 +164,6 @@ void initCharacter(Character &aCharacter) {
   aCharacter.toTheLeft = false;
 }
 ```
-
-Il ne faut pas oublier d'inclure le fichier de constantes dans `Character.h`.
 
 
 ### Programme principal
@@ -173,21 +183,48 @@ N'oublions pas d'inclure les constantes dans le programme principal puis ajouton
 
 <div class="filename" >GBPlatformer01.ino</div>
 ```
+#include "Constants.h"
+
 uint8_t stateOfGame;
+
+void setup() {
+  // ...
+}
+
+void loop() {
+  // ...
+}
 ```
 
 Dans la fonction `setup`, après l'initialisation de la console, initialisons l'état du jeu à la valeur `HOME_STATE`, comme ceci :
 
 <div class="filename" >GBPlatformer01.ino</div>
 ```
-stateOfGame = HOME_STATE;
+void setup() {
+  // initialisation de la Gamebuino META
+  gb.begin();
+
+  stateOfGame = HOME_STATE;
+}
 ```
 
 Il faut instancier la structure pour notre personnage, comme pour la variable qui gère l'état, en dehors des fonctions `setup` et `loop` :
 
 <div class="filename" >GBPlatformer01.ino</div>
 ```
+#include "Constants.h"
+#include "Character.h"
+
+uint8_t stateOfGame;
 Character hero;
+
+void setup() {
+  // ...
+}
+
+void loop() {
+  // ...
+}
 ```
 
 Enfin, modifions le programme dans la fonction `loop` pour :
@@ -209,21 +246,29 @@ Voici à quoi ressemble notre gestion des états :
 
 <div class="filename" >GBPlatformer01.ino</div>
 ```
-switch(stateOfGame) {
-  case HOME_STATE:
-    stateOfGame = LAUNCH_PLAY_STATE;
-    break;
-  case LAUNCH_PLAY_STATE:
-    initCharacter(hero);
-    stateOfGame = PLAY_STATE;
-    break;
-  case PLAY_STATE:
-    gb.display.printf("x,y = %d,%d", hero.x, hero.y);
-    gb.display.println("");
-    gb.display.printf("to the left = %d", hero.toTheLeft);
-    break;
-  default:
-    gb.display.println("Votre message");
+void loop() {
+  // boucle d'attente
+  gb.waitForUpdate();
+
+  // effacer l'écran
+  gb.display.clear();
+
+  switch(stateOfGame) {
+    case HOME_STATE:
+      stateOfGame = LAUNCH_PLAY_STATE;
+      break;
+    case LAUNCH_PLAY_STATE:
+      initCharacter(hero);
+      stateOfGame = PLAY_STATE;
+      break;
+    case PLAY_STATE:
+      gb.display.printf("x,y = %d,%d", hero.x, hero.y);
+      gb.display.println("");
+      gb.display.printf("to the left = %d", hero.toTheLeft);
+      break;
+    default:
+      gb.display.println("Votre message");
+  }
 }
 ```
 
@@ -248,11 +293,9 @@ Pour ce faire, ajoutons dans le fichier `Constants.h` les constantes suivantes :
 
 <div class="filename" >Constants.h</div>
 ```
-const Color HERO_L_COLOR = LIGTHBLUE;
+const Color HERO_L_COLOR = LIGHTBLUE;
 const Color HERO_R_COLOR = BLUE;
 ```
-
-Il est nécessaire d'ajouter la bibliothèque de la console dans le fichier de constantes, sans ça impossible d'utiliser les couleurs.
 
 Nous allons gérer l'affichage du jeu dans les fichiers `Display.h` et `Display.cpp`.
 
@@ -288,14 +331,14 @@ La fonction `paint` ne fera pour l'instant qu'un appel à `paintHero`.
 
 Toutes ces fonctions doivent être définies dans `Display.cpp`.
 
-Pour changer la couleur il faut utiliser [gb.display.setColor](https://gamebuino.com/fr/academy/reference/graphics-setcolor) et pour dessiner un rectangle plein il faut utiliser [gb.display.fillRect](https://gamebuino.com/fr/academy/reference/graphics-fillrect).
+Pour changer la couleur il faut utiliser <a href="https://gamebuino.com/fr/academy/reference/graphics-setcolor" class="external-link" >gb.display.setColor</a> et pour dessiner un rectangle plein il faut utiliser <a href="https://gamebuino.com/fr/academy/reference/graphics-fillrect" class="external-link" >gb.display.fillRect</a>.
 
 Voici le code de la fonction `paintBox` :
 
 <div class="filename" >Display.cpp</div>
 ```
 void paintBox(
-    const uint8_t aX, const uint8_t aY, 
+    const int8_t aX, const int8_t aY, 
     const uint8_t aWidth, const uint8_t aHeight, 
     const Color aColor
 ) {
@@ -304,7 +347,7 @@ void paintBox(
 }
 ```
 
-Pour l'affichage du personnage nous allons utiliser une condition ternaire, ceci afin de choisir la couleur.
+Pour l'affichage du personnage nous allons utiliser l'opérateur ternaire, ceci afin de choisir la couleur.
 
 Voici un code classique :
 
@@ -316,7 +359,7 @@ if(nb > 0) {
 }
 ```
 
-Ce dernier peut-être remplacé par une condition ternaire que voici :
+Ce dernier peut-être remplacé par l'opérateur ternaire que voici :
 
 <div class="filename" >Exemple</div>
 ```
@@ -325,7 +368,7 @@ char signe = (nb > 0) ? '+' : '-';
 
 Voici le code de la fonction `paintHero` :
 
-<div class="filename" >Display.cpp</div>
+<div class="filename" >Display.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
 void paintHero(Character &aCharacter) {
   Color heroColor = (aCharacter.toTheLeft ? HERO_L_COLOR : HERO_R_COLOR);
@@ -350,7 +393,36 @@ Retournons dans le programme principale. N'oubliez pas d'inclure `Display.h` ! R
 
 <div class="filename" >GBPlatformer01.ino</div>
 ```
-paint(hero);
+// Autres includes...
+#include "Display.h"
+
+// Variables globales...
+
+void setup() {
+  // ...
+}
+
+void loop() {
+  // boucle d'attente
+  gb.waitForUpdate();
+
+  // effacer l'écran
+  gb.display.clear();
+
+  switch(stateOfGame) {
+    case HOME_STATE:
+      stateOfGame = LAUNCH_PLAY_STATE;
+      break;
+    case LAUNCH_PLAY_STATE:
+      // ...
+      break;
+    case PLAY_STATE:
+      paint(hero);
+      break;
+    default:
+      gb.display.println("Votre message");
+  }
+}
 ```
 
 Si vous téléversez votre programme, vous devriez voir un joli rectangle bleu en bas de l'écran : c'est votre personnage !
@@ -360,7 +432,7 @@ Si vous téléversez votre programme, vous devriez voir un joli rectangle bleu e
 
 Nous allons ajouter un menu à notre jeu, nous le compléterons au fil de l'avancée du workshop.
 
-Créons un fichier nommé `Lang.h`, nous nous limiterons à l'anglais. Voici le contenu du fichier :
+Créons un fichier nommé `Lang.h`, nous nous limiterons à l'anglais. Nous verrons dans les bonus comment gérer plusieurs langues. Voici le contenu du fichier :
 
 <div class="filename" >Lang.h</div>
 ```
@@ -379,9 +451,9 @@ Nous allons ajouter la gestion du menu dans `Display.h` et dans `Display.cpp`. D
 const uint8_t paintMenu();
 ```
 
-Pour le menu nous allons utiliser la fonction [gb.gui.menu](https://gamebuino.com/fr/academy/reference/gb-gui-menu). Cette fonction prend en paramètre une chaîne de caractères pour le nom du menu, et un tableau de chaîne de caractères pour les items. Pour l'instant le menu ne comporte qu'un seul item.
+Pour le menu nous allons utiliser la fonction <a href="https://gamebuino.com/fr/academy/reference/gb-gui-menu" class="external-link" >gb.gui.menu</a>. Cette fonction prend en paramètre une chaîne de caractères pour le nom du menu, et un tableau de chaîne de caractères pour les items. Pour l'instant le menu ne comporte qu'un seul item.
 
-Voici le code de la fonction `paintMenu` à placé dans `Display.h` :
+Voici le code de la fonction `paintMenu` à placé dans `Display.cpp` :
 
 <div class="filename" >Display.cpp</div>
 ```
@@ -417,24 +489,55 @@ const uint8_t manageCommands();
 #endif
 ```
 
-Le code de la fonction `manageCommands` est relativement simple, si le bouton menu est pressé alors on retourne au menu, sinon on reste dans le jeu, soit le code suivant :
+Le code de la fonction `manageCommands` est relativement simple, si le bouton menu est pressé alors on retourne au menu, sinon on reste dans le jeu, soit le code suivant à écrire dans `Commands.cpp` :
 
 <div class="filename" >Commands.cpp</div>
 ```
 #include "Commands.h"
 
 const uint8_t manageCommands() {
-  return (gb.buttons.pressed(BUTTON_MENU) ? HOME_STATE : PLAY_STATE);
+  return ( gb.buttons.pressed(BUTTON_MENU) ?
+      HOME_STATE
+    :
+      PLAY_STATE
+    );
 }
 ```
 
-Comme vous le voyez nous utilisons à nouveau une condition ternaire.
+Comme vous le voyez nous utilisons à nouveau un opérateur ternaire.
 
-Dans le programme principal, dans l'état `PLAY_STATE` et avant l'affichage du jeu, ajoutons l'appel à la fonction `manangeCommands` soit le code suivant :
+Dans le programme principal, incluons `Commands.h`, dans l'état `PLAY_STATE` et avant l'affichage du jeu, ajoutons l'appel à la fonction `manangeCommands` soit le code suivant :
 
 <div class="filename" >GBPlatformer01.ino</div>
 ```
-stateOfGame = manageCommands();
+// Autres includes...
+#include "Commands.h"
+
+// Variables globales...
+
+void setup() {
+  // ...
+}
+
+void loop() {
+  // effacer l'écran
+  gb.display.clear();
+
+  switch(stateOfGame) {
+    case HOME_STATE:
+      stateOfGame = paintMenu();
+      break;
+    case LAUNCH_PLAY_STATE:
+      // ...
+      break;
+    case PLAY_STATE:
+      stateOfGame = manageCommands();
+      paint(hero);
+      break;
+    default:
+      gb.display.println("Votre message");
+  }
+}
 ```
 
 Vous pouvez téléverser votre programme sur la console, vous aurez au démarrage du jeu un menu avec l'item "Jouer", qui permet de lancer le jeu. Pendant le jeu vous pouvez revenir au menu grâce au bouton menu.
@@ -444,7 +547,7 @@ Vous pouvez téléverser votre programme sur la console, vous aurez au démarrag
 
 Vous voici arrivé à la fin de cette première étape : nous avons créé et affiché un personnage et nous avons géré les commandes basiques pour naviguer dans notre jeu, en partie grâce à un menu.
 
-Si vous avez terminé ou si vous rencontrez des problèmes vous pouvez télécharger la solution [ici](https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v1.0.zip).
+Si vous avez terminé ou si vous rencontrez des problèmes vous pouvez télécharger la solution <a href="https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v1.0.zip" class="external-link" >ici</a>.
 
 Dans la prochaine étape, c'est-à-dire la deuxième, nous aborderons les déplacements du personnage.
 
