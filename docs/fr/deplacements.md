@@ -16,7 +16,7 @@ Dans cette deuxième étape, nous allons animer le personnage en implémentant l
 * aller à gauche ;
 * sauter.
 
-*Je vous invite à télécharger [le code](https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v1.0.zip) qui est le résultat de la première étape afin de partir sur des bases communes.*
+*Je vous invite à télécharger <a href="https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v1.0.zip" class="external-link" >le code</a> qui est le résultat de la première étape afin de partir sur des bases communes.*
 
 ## Avancer à droite ou à gauche
 
@@ -47,7 +47,7 @@ SI touche droite enfoncée ALORS
 FIN SI
 ```
 
-Pour un déplacement "rapide", nous utiliserons la fonction [gb.buttons.repeat](https://gamebuino.com/fr/academy/reference/gb-buttons-repeat).
+Pour un déplacement "rapide", nous utiliserons la fonction <a href="https://gamebuino.com/fr/academy/reference/gb-buttons-repeat" class="external-link" >gb.buttons.repeat</a>.
 
 Pour faire un incrément d'une unité nous utiliserons le raccourci suivant `aCharacter.x++;`, ceci est équivalent à `aCharacter.x += 1;`, ou à `aCharacter.x = aCharacter.x + 1;`.
 
@@ -154,7 +154,7 @@ N'ayez pas peur de toute cette théorie, nous allons passer à l'implémentation
 
 Avant de faire évoluer le personnage, ajoutons quelques constantes dans notre fichiers `Constants.h` :
 
-<div class="filename" >Constants.h</div>
+<div class="filename" >Constants.h <span>/!\ Scroll horizontal /!\</span></div>
 ```
 // Etat du personnage
 const uint8_t ON_THE_PLATFORM_STATE = 0; // ... le joueur est sur le sol
@@ -213,7 +213,7 @@ void rectifyPositionY(Character &aCharacter);
 
 Le code de la fonction `rectifyPositionY`, à placer dans `Character.cpp`, est le suivant :
 
-<div class="filename" >Character.cpp</div>
+<div class="filename" >Character.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
 // Corriger la position y (la fonction évoluera à la prochaine étape)
 void rectifyPositionY(Character &aCharacter) {
@@ -251,7 +251,7 @@ Pour l'instant, la fonction `isOnOnePlatform` contrôlera uniquement si nous som
 
 Voici donc le code pour détecter une collision avec le sol, à écrire dans le fichier `PhysicsEngine.cpp` :
 
-<div class="filename" >PhysicsEngine.cpp</div>
+<div class="filename" >PhysicsEngine.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
 const uint8_t isOnOnePlatform(const Character &aCharacter) {
   return ( (aCharacter.y + aCharacter.vy) >= (gb.display.height() - UNDER_CENTER_Y_HERO) ) ? ID_GROUND : NO_ID ;
@@ -269,7 +269,7 @@ bool isOutOfWorld(Character &aCharacter);
 
 Voici le code de la fonction `isOutOfWorld` (à écrire dans le fichier `PhysicsEngine.cpp`) :
 
-<div class="filename" >PhysicsEngine.cpp</div>
+<div class="filename" >PhysicsEngine.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
 bool isOutOfWorld(Character &aCharacter) {
   if( aCharacter.x <= OVER_CENTER_X_HERO ) {
@@ -294,7 +294,7 @@ Les limites étant déterminées, passons au développement du saut.
 
 Pour gérer l'élan, nous allons modifier la fonction `manageCommands` (qui est dans le fichier `Commands.cpp`) :
 
-<div class="filename" >Commands.cpp</div>
+<div class="filename" >Commands.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
 aCharacter.vx = 0; // par défaut, pas de vitesse horizontale
 
@@ -313,7 +313,7 @@ if(gb.buttons.repeat(BUTTON_RIGHT, 1)) {
 
 Toujours dans la fonction `manageCommands`, il faut écrire le code pour que lorsque le joueur appuye sur le bouton A et que le personnage ne saute pas, on donne l'impulsion initiale pour le saut, soit :
 
-<div class="filename" >Commands.cpp</div>
+<div class="filename" >Commands.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
 if(gb.buttons.pressed(BUTTON_A) && aCharacter.state != JUMP_STATE) {
   aCharacter.state = PUSH_FOR_JUMP_STATE;
@@ -329,7 +329,7 @@ void jumpMovement(Character &aCharacter);
 
 Ajoutons dans `PhysicsEngine.cpp` le code de `jumpMovement` :
 
-<div class="filename" >PhysicsEngine.cpp</div>
+<div class="filename" >PhysicsEngine.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
 // Réalise le déplacement du personnage lors du saut
 void jumpMovement(Character &aCharacter) {
@@ -386,19 +386,39 @@ Le personnage est prêt à sauter, enfin presque ! Effectivement il faut écrire
 Retournons dans le programme principal, et en particulier dans l'état `PLAY_STATE` où il est nécessaire d'apporter des modifications. 
 Le code pour cet état doit être :
 
-<div class="filename" >GBPlatformer01.ino</div>
+<div class="filename" >GBPlatformer01.ino <span>/!\ Scroll horizontal /!\</span></div>
 ```
-if(hero.state == ON_THE_PLATFORM_STATE) {
-  stateOfGame = manageCommands(hero);
-}
+void loop() {
+  // boucle d'attente
+  gb.waitForUpdate();
 
-if(hero.state != JUMP_STATE && hero.state != PUSH_FOR_JUMP_STATE) {
-  gb.display.println("GRAVITY");
-} else if(hero.state == JUMP_STATE || hero.state == PUSH_FOR_JUMP_STATE) {
-  jump(hero);
-}
+  // effacer l'écran
+  gb.display.clear();
 
-paint(hero);
+  switch(stateOfGame) {
+    case HOME_STATE:
+      stateOfGame = paintMenu();
+      break;
+    case LAUNCH_PLAY_STATE:
+      // ...
+      break;
+    case PLAY_STATE:
+      if(hero.state == ON_THE_PLATFORM_STATE) {
+        stateOfGame = manageCommands(hero);
+      }
+
+      if(hero.state != JUMP_STATE && hero.state != PUSH_FOR_JUMP_STATE) {
+        gb.display.println("GRAVITY");
+      } else if(hero.state == JUMP_STATE || hero.state == PUSH_FOR_JUMP_STATE) {
+        jump(hero);
+      }
+
+      paint(hero);
+      break;
+    default:
+      gb.display.println("Votre message");
+  }
+)
 ```
 
 Comme vous pouvez le remarquez, le joueur peut agir sur les commandes uniquement s'il est sur une plateforme, soit pour l'instant sur le sol.
@@ -413,11 +433,11 @@ Il est important que vous jouiez avec pour trouver le bon paramétrage.
 
 J'insiste ! Essayez de changer ces paramètres !
 
-Vous avez sûrement remarqué que le paramétrage fourni est trop important pour un jeu de plateforme qui doit se jouer dans les limites de l'écran uniquement.
+Vous avez sûrement remarqué que le paramétrage fourni est trop important pour un jeu de plateformes qui doit se jouer dans les limites de l'écran uniquement.
 
 Ainsi, dans `Constants.h`, et après une phase de calibrage, nous avons choisis le paramétrage suivant :
 
-<div class="filename" >Constants.h</div>
+<div class="filename" >Constants.h <span>/!\ Scroll horizontal /!\</span></div>
 ```
 // Gravité
 const uint8_t GRAVITY = 1;
@@ -432,7 +452,7 @@ const uint8_t INIT_VERTICAL_VELOCITY = 6; // ... vitesse verticale initiale
 
 Vous voici arrivé à la fin de cette deuxième étape où nous avons ajouté les déplacements pour le personnage : avancer à gauche, avancer à droite et sauter.
 
-Si vous avez terminé ou si vous rencontrez des problèmes vous pouvez télécharger la solution [ici](https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v2.0.zip).
+Si vous avez terminé ou si vous rencontrez des problèmes vous pouvez télécharger la solution <a href="" class="external-link" >ici</a>.
 
 Dans la prochaine étape, c'est-à-dire la troisième, nous aborderons la gestion des plateformes de la création à l'affichage, en passant par la gestion des collisions. Et nous implémenterons également la chute libre.
 
