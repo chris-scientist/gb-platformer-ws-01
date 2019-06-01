@@ -15,7 +15,7 @@ Dans cette troisième étape, nous allons implémenter :
 * la chute libre ;
 * et la gestion des plateformes.
 
-*Je vous invite à télécharger [le code](https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v2.0.zip) qui est le résultat de la deuxième étape afin de partir sur des bases communes.*
+*Je vous invite à télécharger <a href="https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v2.0.zip" class="external-link" >le code</a> qui est le résultat de la deuxième étape afin de partir sur des bases communes.*
 
 ## Chute libre
 
@@ -81,7 +81,7 @@ const uint8_t ID_PLATFORM_1 = 2;
 const uint8_t ID_PLATFORM_2 = 3;
 const uint8_t ID_PLATFORM_3 = 4;
 
-// Type de plateforme
+// Type de plateformes
 const uint8_t NO_PLATFORM_TYPE = 0;
 const uint8_t GROUND_TYPE = 1;
 const uint8_t PLATFORM_TYPE = 2;
@@ -101,18 +101,19 @@ const uint8_t OVER_CENTER_Y_GROUND = 2;
 
 Dans le fichier `Platform.h`, ajoutons entre autre la structure gérant les plateformes :
 
-<div class="filename" >Platform.h</div>
+<div class="filename" >Platform.h <span>/!\ Scroll horizontal /!\</span></div>
 ```
 #ifndef PLATFORMER_PLATFORM
 #define PLATFORMER_PLATFORM
 
+#include <Gamebuino-Meta.h>
 #include "Constants.h"
 
 struct Platform {
   int8_t x; // ................ position x du début de la plateforme (centre de la première plateforme)
   int8_t y; // ................ position y de la plateforme (centre de la plateforme)
   uint8_t lengthPlatform; // ... longueur de la plateforme en bloc (doit être au minimum égale à 2), taille des blocs dans le fichier de constantes
-  uint8_t type; // ............. type de plateforme : voir constantes
+  uint8_t type; // ............. type de plateformes : voir constantes
   uint8_t id; // ............... identifiant (unique) de la plateforme
   bool isGoThrough; // ......... true pour indiquer que le joueur peut passer à travers la plateforme, sinon false
 };
@@ -124,13 +125,21 @@ Toujours dans `Platform.h` ajoutons le prototype de la fonction `createPlatform`
 
 <div class="filename" >Platform.h</div>
 ```
-Platform createPlatform(int8_t aX, int8_t aY, uint8_t aLength, uint8_t aType, uint8_t aId, bool goThrough);
+Platform createPlatform(
+  int8_t aX, int8_t aY, 
+  uint8_t aLength, 
+  uint8_t aType, 
+  uint8_t aId, 
+  bool goThrough
+);
 ```
 
 Dans le fichier `Platform.cpp`, ajoutons la définition de la fonction `createPlatform` :
 
-<div class="filename" >Platform.cpp</div>
+<div class="filename" >Platform.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
+#include "Platform.h"
+
 Platform createPlatform(int8_t aX, int8_t aY, uint8_t aLength, uint8_t aType, uint8_t aId, bool goThrough) {
   // On force la taille de la plateforme à 2 blocs
   if(aLength < 2) {
@@ -166,7 +175,7 @@ Comme vous l'avez vu dans les constantes, nous allons créer quatre plateformes,
 
 Dans `Platform.cpp`, définissons la plateforme `initPlatforms` :
 
-<div class="filename" >Platform.cpp</div>
+<div class="filename" >Platform.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
 void initPlatforms(Platform * aSet) {
   aSet[0] = createPlatform(4, 62, 10, GROUND_TYPE, ID_GROUND, false);
@@ -180,16 +189,50 @@ Dans le programme principal, en dehors des fonctions `setup` et `loop`, ajoutons
 
 <div class="filename" >GBPlatformer01.ino</div>
 ```
+// Autres includes
+#include "Platform.h"
+
+// Autres variables globales
 Platform setOfPlatforms[NB_OF_PLATFORMS];
+
+void setup() {
+  // ...
+}
+
+void loop() {
+  // ...
+}
 ```
 
 N'oubliez pas d'inclure `Platform.h` dans votre programme principal.
 
 Toujours dans le programme principal, en particulier dans l'état `LAUNCH_PLAY_STATE`, initialisons les plateformes :
 
-<div class="filename" >GBPlatformer01.ino</div>
+<div class="filename" >GBPlatformer01.ino <span>/!\ Scroll horizontal /!\</span></div>
 ```
-initPlatforms(setOfPlatforms); // ... on réinitialise les plateformes
+void loop() {
+  // boucle d'attente
+  gb.waitForUpdate();
+
+  // effacer l'écran
+  gb.display.clear();
+
+  switch(stateOfGame) {
+    case HOME_STATE:
+      stateOfGame = paintMenu();
+      break;
+    case LAUNCH_PLAY_STATE:
+      initPlatforms(setOfPlatforms); // ... on réinitialise les plateformes
+      initCharacter(hero);
+      stateOfGame = PLAY_STATE;
+      break;
+    case PLAY_STATE:
+      // ...
+      break;
+    default:
+      gb.display.println("Votre message");
+  }
+}
 ```
 
 ### Affichage des plateformes
@@ -217,12 +260,15 @@ Dans `Display.h`, ajoutons le prototype de la fonction `paintPlatform` qui a pou
 
 <div class="filename" >Display.h</div>
 ```
-void paintPlatform(const int8_t aX, const int8_t aY, const bool isGoThrough);
+void paintPlatform(
+  const int8_t aX, const int8_t aY, 
+  const bool isGoThrough
+);
 ```
 
 Dans `Display.cpp`, définissons la fonction `paintPlatform` :
 
-<div class="filename" >Display.cpp</div>
+<div class="filename" >Display.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
 // Réalise l'affichage d'une plateforme flottante
 void paintPlatform(const int8_t aX, const int8_t aY, const bool isGoThrough) {
@@ -308,30 +354,62 @@ Dans le programme principal, modifions l'appel de la méthode `paint` tel que :
 
 <div class="filename" >GBPlatformer01.ino</div>
 ```
-paint(hero, setOfPlatforms);
+void loop() {
+  // boucle d'attente
+  gb.waitForUpdate();
+
+  // effacer l'écran
+  gb.display.clear();
+
+  switch(stateOfGame) {
+    case HOME_STATE:
+      stateOfGame = paintMenu();
+      break;
+    case LAUNCH_PLAY_STATE:
+      // ...
+      break;
+    case PLAY_STATE:
+      // ...
+
+      paint(hero, setOfPlatforms);
+      break;
+    default:
+      gb.display.println("Votre message");
+  }
+)
 ```
 
 Avant de rendre nos plateformes "physiques", nous allons modifier la position de notre personnage pour qu'il s'affiche au dessus du sol.
 
 Dans `Character.cpp`, modifions la fonction `initCharacter`, en particulier la position `y` tel que :
 
-<div class="filename" >Character.cpp</div>
+<div class="filename" >Character.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
-aCharacter.y = gb.display.height() - (UNDER_CENTER_Y_HERO + HEIGHT_GROUND);
+void initCharacter(Character &aCharacter) {
+  // on force la position intiale du héro au milieu de l'écran et plaqué au sol
+  aCharacter.x = 40;
+  aCharacter.y = gb.display.height() - (UNDER_CENTER_Y_HERO + HEIGHT_GROUND);
+
+  // ...
+}
 ```
 
 Toujours dans `Character.cpp`, modifions la fonction `rectifyPositionY` tel que :
 
-<div class="filename" >Character.cpp</div>
+<div class="filename" >Character.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
-aCharacter.y = (gb.display.height() - (UNDER_CENTER_Y_HERO + HEIGHT_GROUND));
+void rectifyPositionY(Character &aCharacter) {
+  aCharacter.y = (gb.display.height() - (UNDER_CENTER_Y_HERO + HEIGHT_GROUND));
+}
 ```
 
 Enfin, dans `PhysicsEngine.cpp`, modifions la fonction `isOnOnePlatform` tel que :
 
-<div class="filename" >PhysicsEngine.cpp</div>
+<div class="filename" >PhysicsEngine.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
-return ( (aCharacter.y + aCharacter.vy) >= (gb.display.height() - (UNDER_CENTER_Y_HERO + HEIGHT_GROUND)) ) ? ID_GROUND : NO_ID ;
+const uint8_t isOnOnePlatform(const Character &aCharacter) {
+  return ( (aCharacter.y + aCharacter.vy) >= (gb.display.height() - (UNDER_CENTER_Y_HERO + HEIGHT_GROUND)) ) ? ID_GROUND : NO_ID ;
+}
 ```
 
 Vous pouvez téléverser le programme vers votre console. Vous verrez que votre personnage est dessiné sur le sol, par contre vous pouvez sauter sur les plateformes, mais aucune réaction, vous les traversez. Nous allons y remédier tout de suite.
@@ -390,12 +468,15 @@ Dans `PhysicsEngine.h`, ajoutons le prototype de la fonction `isOnThePlatform` :
 
 <div class="filename" >PhysicsEngine.h</div>
 ```
-const uint8_t isOnThePlatform(const Character &aCharacter, const Platform &aPlatform);
+const uint8_t isOnThePlatform(
+  const Character &aCharacter, 
+  const Platform &aPlatform
+);
 ```
 
 Dans `PhysicsEngine.cpp`, définissons la fonction `isOnThePlatform` :
 
-<div class="filename" >PhysicsEngine.cpp</div>
+<div class="filename" >PhysicsEngine.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
 // Détecter si une collision à lieu avec la plateforme en paramètre
 const uint8_t isOnThePlatform(const Character &aCharacter, const Platform &aPlatform) {
@@ -441,12 +522,15 @@ Dans `PhysicsEngine.h`, modifions le prototype de la fonction `isOnOnePlatform` 
 
 <div class="filename" >PhysicsEngine.h</div>
 ```
-const uint8_t isOnOnePlatform(const Character &aCharacter, Platform * aSetOfPlatforms);
+const uint8_t isOnOnePlatform(
+  const Character &aCharacter, 
+  Platform * aSetOfPlatforms
+);
 ```
 
 Modifions le code de la fonction `isOnOnePlatform` (dans `PhysicsEngine.cpp`) :
 
-<div class="filename" >PhysicsEngine.cpp</div>
+<div class="filename" >PhysicsEngine.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
 // Permet de détecter une collision avec une plateforme
 const uint8_t isOnOnePlatform(const Character &aCharacter, Platform * aSetOfPlatforms) {
@@ -475,7 +559,7 @@ void rectifyPositionY(Character &aCharacter, Platform &aPlatform);
 
 Et adaptons le code de la fonction `rectifyPositionY` :
 
-<div class="filename" >Character.cpp</div>
+<div class="filename" >Character.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
 // Corriger la position y
 void rectifyPositionY(Character &aCharacter, Platform &aPlatform) {
@@ -500,7 +584,7 @@ void gravity(Character &aCharacter, Platform * aSetOfPlatforms);
 
 Dans `PhysicsEngine.cpp`, modifions la fonction `gravity` tel que :
 
-<div class="filename" >PhysicsEngine.cpp</div>
+<div class="filename" >PhysicsEngine.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
 // Chute libre
 void gravity(Character &aCharacter, Platform * aSetOfPlatforms) {
@@ -526,7 +610,7 @@ void jump(Character &aCharacter, Platform * aSetOfPlatforms);
 
 Dans `PhysicsEngine.h`, modifions la fonction `jump` :
 
-<div class="filename" >PhysicsEngine.h</div>
+<div class="filename" >PhysicsEngine.h <span>/!\ Scroll horizontal /!\</span></div>
 ```
 // Implémentation du saut du personnage
 void jump(Character &aCharacter, Platform * aSetOfPlatforms) {
@@ -559,26 +643,48 @@ void jump(Character &aCharacter, Platform * aSetOfPlatforms) {
 
 Enfin, dans le programme principal, apportons quelques modifications dans le code correspondant à l'état `PLAY_STATE` :
 
-<div class="filename" >GBPlatformer01.ino</div>
+<div class="filename" >GBPlatformer01.ino <span>/!\ Scroll horizontal /!\</span></div>
 ```
-/* ... */
+void loop() {
+  // boucle d'attente
+  gb.waitForUpdate();
 
-if(hero.state != JUMP_STATE && hero.state != PUSH_FOR_JUMP_STATE) {
-  gravity(hero, setOfPlatforms);
-} else if(hero.state == JUMP_STATE || hero.state == PUSH_FOR_JUMP_STATE) {
-  jump(hero, setOfPlatforms);
-}
+  // effacer l'écran
+  gb.display.clear();
 
-/* ... */
+  switch(stateOfGame) {
+    case HOME_STATE:
+      stateOfGame = paintMenu();
+      break;
+    case LAUNCH_PLAY_STATE:
+      // ...
+      break;
+    case PLAY_STATE:
+      if(hero.state == ON_THE_PLATFORM_STATE) {
+        stateOfGame = manageCommands(hero);
+      }
+
+      if(hero.state != JUMP_STATE && hero.state != PUSH_FOR_JUMP_STATE) {
+        gravity(hero, setOfPlatforms);
+      } else if(hero.state == JUMP_STATE || hero.state == PUSH_FOR_JUMP_STATE) {
+        jump(hero, setOfPlatforms);
+      }
+
+      paint(hero);
+      break;
+    default:
+      gb.display.println("Votre message");
+  }
+)
 ```
 
-Téléversez votre porgramme vers la console, et amusez-vous à sauter sur les plateformes. Si vous avez conserver les valeurs fournies dans cette étape, autant les couleurs que la position des plateformes, vous pouvez être en-dessous de la plateformes verte claire et sauter, pour ainsi monter dessus.
+Téléversez votre porgramme vers la console, et amusez-vous à sauter sur les plateformes. Si vous avez conserver les valeurs fournies dans cette étape, autant les couleurs que la position des plateformes, vous pouvez être en-dessous de la plateforme verte claire et sauter, pour ainsi monter dessus.
 
 ## Conclusion
 
 Vous voici arrivé à la fin de cette troisième étape : où nous avons ajouté la chute libre et la gestion des plateformes.
 
-Si vous avez terminé ou si vous rencontrez des problèmes vous pouvez télécharger la solution [ici](https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v3.0.zip).
+Si vous avez terminé ou si vous rencontrez des problèmes vous pouvez télécharger la solution <a href="https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v3.0.zip" class="external-link" >ici</a>.
 
 Dans la prochaine étape, c'est-à-dire la quatrième, nous aborderons les interactions avec le monde. Nous allons ainsi voir comment ajouter des objets comme des clés et une porte.
 
