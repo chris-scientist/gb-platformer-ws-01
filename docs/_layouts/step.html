@@ -34,5 +34,5 @@ layout: default
 
   {{ content }}
 
-  <a href="{{ site.url }}{{ page.next }}" role="button" class="btn btn-secondary" >Lire la suite &rsaquo;&rsaquo;</a>
+  <a href="{{ site.url }}{{ page.next }}" role="button" class="btn btn-secondary" >{% if page.lang == 'fr' %}Lire la suite{% else %}Read more{% endif %} &rsaquo;&rsaquo;</a>
 </main>
