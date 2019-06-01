@@ -1,4 +1,14 @@
 
+.external-link {
+	border-bottom: 2px solid #fff;
+}
+
+.external-link:hover {
+	text-decoration: none;
+	color: #CF8E44;
+	border-color: #CF8E44;
+}
+
 img {
 	max-width: 600px;
 }
