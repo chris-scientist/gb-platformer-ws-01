@@ -7,7 +7,7 @@ link-other-lang: /en/introduction/
 lang: fr
 ---
 
-# Etape 2 - gestion des déplacements
+# Etape 2 - Gestion des déplacements
 
 ## Introduction
 

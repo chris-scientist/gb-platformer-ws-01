@@ -7,7 +7,7 @@ link-other-lang: /en/introduction/
 lang: fr
 ---
 
-# Etape 4 - interactions avec le monde
+# Etape 4 - Interactions avec le monde
 
 ## Introduction
 
@@ -467,7 +467,7 @@ void loop() {
       // ...
 
       interactionsWithWorld(hero, setOfObjects);
-      
+
       paint(hero, setOfPlatforms, setOfObjects);
       break;
     default:

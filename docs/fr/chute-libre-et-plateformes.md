@@ -7,7 +7,7 @@ link-other-lang: /en/introduction/
 lang: fr
 ---
 
-# Etape 3 - chute libre et plateformes
+# Etape 3 - Chute libre et plateformes
 
 ## Introduction
 

@@ -7,7 +7,7 @@ link-other-lang: /en/introduction/
 lang: fr
 ---
 
-# Etape 6 - quel sera votre meilleur score ?
+# Etape 6 - Quel sera votre meilleur score ?
 
 ## Introduction
 

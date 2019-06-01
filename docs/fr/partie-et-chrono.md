@@ -7,7 +7,7 @@ link-other-lang: /en/introduction/
 lang: fr
 ---
 
-# Etape 5 - gestion de la partie et chronomètre
+# Etape 5 - Gestion de la partie et chronomètre
 
 ## Introduction
 
