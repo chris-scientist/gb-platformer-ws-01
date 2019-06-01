@@ -109,6 +109,10 @@ blockquote p {
 	font-size: small;
 }
 
+.filename span {
+	color: red;
+}
+
 .highlighter-rouge {
 	color: #CF8E44;
 }
