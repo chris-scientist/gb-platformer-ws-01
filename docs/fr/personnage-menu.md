@@ -520,6 +520,9 @@ void setup() {
 }
 
 void loop() {
+  // boucle d'attente
+  gb.waitForUpdate();
+
   // effacer l'écran
   gb.display.clear();
 
