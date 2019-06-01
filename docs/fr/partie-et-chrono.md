@@ -13,7 +13,7 @@ lang: fr
 
 Dans cette cinquième étape, nous allons implémenter : la fin de partie, un chronomètre et un écran de fin de partie et nous gérerons le "Game over" : la fin de partie lorsque le temps maximum autorisé pour compléter le niveau a été dépassé.
 
-*Je vous invite à télécharger [le code](https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v4.0.zip) qui est le résultat de la quatrième étape afin de partir sur des bases communes.*
+*Je vous invite à télécharger <a href="https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v4.0.zip" class="external-link" >le code</a> qui est le résultat de la quatrième étape afin de partir sur des bases communes.*
 
 
 ## Fin de partie
@@ -59,8 +59,43 @@ N'oublions pas d'inclure le fichier `Game.h` dans le programme principal et ajou
 
 <div class="filename" >GBPlatformer01.ino</div>
 ```
-if( isEndOfGame(setOfObjects[1]) ) {
-  stateOfGame = GAME_IS_FINISH_STATE;
+// Autres includes...
+#include "Game.h"
+
+// Variables globales...
+
+void setup() {
+  // ...
+}
+
+void loop() {
+  // boucle d'attente
+  gb.waitForUpdate();
+
+  // effacer l'écran
+  gb.display.clear();
+
+  switch(stateOfGame) {
+    case HOME_STATE:
+      stateOfGame = paintMenu();
+      break;
+    case LAUNCH_PLAY_STATE:
+      // ...
+      break;
+    case PLAY_STATE:
+      // ...
+
+      interactionsWithWorld(hero, setOfObjects);
+
+      paint(hero);
+
+      if( isEndOfGame(setOfObjects[1]) ) {
+        stateOfGame = GAME_IS_FINISH_STATE;
+      }
+      break;
+    default:
+      gb.display.println("Votre message");
+  }
 }
 ```
 
@@ -131,10 +166,40 @@ Dans le programme principal, ajoutons l'état fin de jeu soit `GAME_IS_FINISH_ST
 
 <div class="filename" >GBPlatformer01.ino</div>
 ```
-case GAME_IS_FINISH_STATE:
-  paintEndOfGame();
-  stateOfGame = manageCommandsOutOfGame(stateOfGame);
-  break;
+// Autres includes...
+#include "Game.h"
+
+// Variables globales...
+
+void setup() {
+  // ...
+}
+
+void loop() {
+  // boucle d'attente
+  gb.waitForUpdate();
+
+  // effacer l'écran
+  gb.display.clear();
+
+  switch(stateOfGame) {
+    case HOME_STATE:
+      stateOfGame = paintMenu();
+      break;
+    case LAUNCH_PLAY_STATE:
+      // ...
+      break;
+    case PLAY_STATE:
+      // ...
+      break;
+    case GAME_IS_FINISH_STATE:
+      paintEndOfGame();
+      stateOfGame = manageCommandsOutOfGame(stateOfGame);
+      break;
+    default:
+      gb.display.println("Votre message");
+  }
+}
 ```
 
 
@@ -202,12 +267,20 @@ Dans le programme principal, incluons le fichier `Timer.h` et créons le chronom
 
 <div class="filename" >GBPlatformer01.ino</div>
 ```
+// Autres includes...
+#include "Timer.h"
+
+// Autres variables globales...
 Timer myTimer;
 
 void setup() {
-  /* ... */
+  // ... 
 
   createTimer(myTimer);
+}
+
+void loop() {
+  // ...
 }
 ```
 
@@ -232,9 +305,33 @@ void resetTimer(Timer &aTimer) {
 
 Dans le programme principal, quand le jeu est à l'état `LAUNCH_PLAY_STATE`, il faut réinitialiser le chronomètre :
 
-<div class="filename" >GBPlatformer01.ino</div>
+<div class="filename" >GBPlatformer01.ino <span>/!\ Scroll horizontal /!\</span></div>
 ```
-resetTimer(myTimer); // ............. on réinitialise le chronomètre
+void loop() {
+  // boucle d'attente
+  gb.waitForUpdate();
+
+  // effacer l'écran
+  gb.display.clear();
+
+  switch(stateOfGame) {
+    case HOME_STATE:
+      stateOfGame = paintMenu();
+      break;
+    case LAUNCH_PLAY_STATE:
+      resetTimer(myTimer); // ............. on réinitialise le chronomètre
+      initObjects(setOfObjects); // ....... on réinitialise les objets
+      initPlatforms(setOfPlatforms); // ... on réinitialise les plateformes
+      initCharacter(hero);
+      stateOfGame = PLAY_STATE;
+      break;
+    case PLAY_STATE:
+      // ...
+      break;
+    default:
+      gb.display.println("Votre message");
+  }
+}
 ```
 
 Dans `Timer.h`, ajoutons le prototype de la fonction `pauseForTimer` :
@@ -266,7 +363,7 @@ void computeTime(Timer &aTimer);
 
 Dans `Timer.cpp`, implémentons la fonction `computeTime` :
 
-<div class="filename" >Timer.cpp</div>
+<div class="filename" >Timer.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
 // Décomposer le temps écoulé en jours, heures, minutes et secondes
 void computeTime(Timer &aTimer) {
@@ -373,8 +470,37 @@ Retournons dans le programme principal, dans l'état `PLAY_STATE`, modifiez la r
 
 <div class="filename" >GBPlatformer01.ino</div>
 ```
-if( isEndOfGame(setOfObjects[1]) ) {
-  stateOfGame = SAVE_HIGH_SCORE_STATE;
+void loop() {
+  // boucle d'attente
+  gb.waitForUpdate();
+
+  // effacer l'écran
+  gb.display.clear();
+
+  switch(stateOfGame) {
+    case HOME_STATE:
+      stateOfGame = paintMenu();
+      break;
+    case LAUNCH_PLAY_STATE:
+      // ...
+      break;
+    case PLAY_STATE:
+      // ...
+
+      interactionsWithWorld(hero, setOfObjects);
+
+      paint(hero, setOfPlatforms, setOfObjects);
+
+      if( isEndOfGame(setOfObjects[1]) ) {
+        stateOfGame = SAVE_HIGH_SCORE_STATE;
+      }
+      break;
+    case GAME_IS_FINISH_STATE:
+      // ...
+      break;
+    default:
+      gb.display.println("Votre message");
+  }
 }
 ```
 
@@ -384,12 +510,36 @@ Toujours dans le programme principal, ajoutons un nouvel état, pour l'instant, 
 
 <div class="filename" >GBPlatformer01.ino</div>
 ```
-case SAVE_HIGH_SCORE_STATE:
-  myTimer.activateTimer = false;
-  runTimer(myTimer);
+void loop() {
+  // boucle d'attente
+  gb.waitForUpdate();
 
-  stateOfGame = GAME_IS_FINISH_STATE;
-  break;
+  // effacer l'écran
+  gb.display.clear();
+
+  switch(stateOfGame) {
+    case HOME_STATE:
+      stateOfGame = paintMenu();
+      break;
+    case LAUNCH_PLAY_STATE:
+      // ...
+      break;
+    case PLAY_STATE:
+      // ...
+      break;
+    case GAME_IS_FINISH_STATE:
+      // ...
+      break;
+    case SAVE_HIGH_SCORE_STATE:
+      myTimer.activateTimer = false;
+      runTimer(myTimer);
+
+      stateOfGame = GAME_IS_FINISH_STATE;
+      break;
+    default:
+      gb.display.println("Votre message");
+  }
+}
 ```
 
 Le chronomètre est à ce stade fonctionnel. Pour le constater, nous allons l'afficher sur l'écran de jeu.
@@ -432,12 +582,17 @@ Dans `Display.h`, modifions le prototype de la fonction `paint` comme ceci :
 
 <div class="filename" >Display.h</div>
 ```
-void paint(Character &aCharacter, Platform * aSetOfPlatforms, Object * aSetOfObjects, const uint16_t * aTime);
+void paint(
+  Character &aCharacter, 
+  Platform * aSetOfPlatforms, 
+  Object * aSetOfObjects, 
+  const uint16_t * aTime
+);
 ```
 
 Dans `Display.cpp`, mettons à jour la fonction `paint` :
 
-<div class="filename" >Display.cpp</div>
+<div class="filename" >Display.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
 void paint(Character &aCharacter, Platform * aSetOfPlatforms, Object * aSetOfObjects, const uint16_t * aTime) {
   /* affichage du jeu... */
@@ -447,9 +602,40 @@ void paint(Character &aCharacter, Platform * aSetOfPlatforms, Object * aSetOfObj
 
 Dans le programme principal, adaptons l'appel de la fonction `paint` (dans l'état `PLAY_STATE`) :
 
-<div class="filename" >GBPlatformer01.ino</div>
+<div class="filename" >GBPlatformer01.ino <span>/!\ Scroll horizontal /!\</span></div>
 ```
-paint(hero, setOfPlatforms, setOfObjects, myTimer.valueOfTime);
+void loop() {
+  // boucle d'attente
+  gb.waitForUpdate();
+
+  // effacer l'écran
+  gb.display.clear();
+
+  switch(stateOfGame) {
+    case HOME_STATE:
+      stateOfGame = paintMenu();
+      break;
+    case LAUNCH_PLAY_STATE:
+      // ...
+      break;
+    case PLAY_STATE:
+      // ...
+
+      interactionsWithWorld(hero, setOfObjects);
+
+      paint(hero, setOfPlatforms, setOfObjects, myTimer.valueOfTime);
+
+      if( isEndOfGame(setOfObjects[1]) ) {
+        stateOfGame = SAVE_HIGH_SCORE_STATE;
+      }
+      break;
+    case GAME_IS_FINISH_STATE:
+      // ...
+      break;
+    default:
+      gb.display.println("Votre message");
+  }
+}
 ```
 
 Avant de passer au "game over", nous allons afficher le temps sur l'écran de fin de jeu.
@@ -463,7 +649,7 @@ void paintEndOfGame(const uint16_t * aTime);
 
 Dans `Display.cpp`, adaptons la fonction `paintEndOfGame` :
 
-<div class="filename" >Display.cpp</div>
+<div class="filename" >Display.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
 void paintEndOfGame(const uint16_t * aTime) {
   gb.display.setFontSize(2);
@@ -486,7 +672,23 @@ Dans le programme principal, dans l'état `GAME_IS_FINISH_STATE`, modifions l'ap
 
 <div class="filename" >GBPlatformer01.ino</div>
 ```
-paintEndOfGame(myTimer.valueOfTime);
+void loop() {
+  // boucle d'attente
+  gb.waitForUpdate();
+
+  // effacer l'écran
+  gb.display.clear();
+
+  switch(stateOfGame) {
+    // ...
+    case GAME_IS_FINISH_STATE:
+      paintEndOfGame(myTimer.valueOfTime);
+      stateOfGame = manageCommandsOutOfGame(stateOfGame);
+      break;
+    default:
+      gb.display.println("Votre message");
+  }
+}
 ```
 
 Vous pouvez téléverser le programme vers votre console, vous constaterez alors que le chronomètre "redémarre à zéro" au-delà d'une minute. C'est normal, comme nous affichons que les secondes et les millisecondes, la précision est perdu. C'est un détail que nous règlerons dans la suite de ce workshop. En effet, au-delà de 20 000 millisecondes (c'est-à-dire 20 secondes) nous allons déclencher le "game over".
@@ -512,7 +714,7 @@ bool isGameOver(Timer &aTimer);
 
 Dans `Game.cpp`, implémentons la fonction `isGameOver` :
 
-<div class="filename" >Game.cpp</div>
+<div class="filename" >Game.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
 bool isGameOver(Timer &aTimer) {
   return ( (aTimer.timeInMilliseconds + aTimer.tempTime) >= MAX_TIME_OF_GAME );
@@ -561,21 +763,56 @@ Dans un premier temps, ajouter l'état `GAME_OVER_STATE`, dans cet état nous ut
 
 <div class="filename" >GBPlatformer01.ino</div>
 ```
-case GAME_OVER_STATE:
-  stateOfGame = manageCommandsOutOfGame(stateOfGame);
-  paintGameOverScreen();
-  
-  break;
+void loop() {
+  // boucle d'attente
+  gb.waitForUpdate();
+
+  // effacer l'écran
+  gb.display.clear();
+
+  switch(stateOfGame) {
+    // ...
+    case GAME_OVER_STATE:
+      stateOfGame = manageCommandsOutOfGame(stateOfGame);
+      paintGameOverScreen();
+      
+      break;
+    default:
+      gb.display.println("Votre message");
+  }
+}
 ```
 
 Dans un second temps, ajoutons la route vers le game over, ceci dans l'état `PLAY_STATE` :
 
-<div class="filename" >GBPlatformer01.ino</div>
+<div class="filename" >GBPlatformer01.ino <span>/!\ Scroll horizontal /!\</span></div>
 ```
-if( isEndOfGame(setOfObjects[1]) ) {
-  // ...
-} else {
-  stateOfGame = ( isGameOver(myTimer) ? GAME_OVER_STATE : PLAY_STATE );
+void loop() {
+  // boucle d'attente
+  gb.waitForUpdate();
+
+  // effacer l'écran
+  gb.display.clear();
+
+  switch(stateOfGame) {
+    // ...
+    case PLAY_STATE:
+      // ...
+
+      interactionsWithWorld(hero, setOfObjects);
+
+      paint(hero, setOfPlatforms, setOfObjects, myTimer.valueOfTime);
+
+      if( isEndOfGame(setOfObjects[1]) ) {
+        stateOfGame = SAVE_HIGH_SCORE_STATE;
+      } else {
+        stateOfGame = ( isGameOver(myTimer) ? GAME_OVER_STATE : PLAY_STATE );
+      }
+      break;
+    // ...
+    default:
+      gb.display.println("Votre message");
+  }
 }
 ```
 
@@ -659,7 +896,7 @@ const uint8_t manageCommandsForPause() {
 
 Toujours dans `Commands.cpp`, modifions la fonction `manageCommands` pour rediriger vers l'écran de pause lorsqu'on appuye sur le bouton menu :
 
-<div class="filename" >Commands.cpp</div>
+<div class="filename" >Commands.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
 const uint8_t manageCommands(Character &aCharacter) {
 
@@ -673,57 +910,108 @@ Apportons des modifications au programme principal.
 
 Dans l'état `PLAY_STATE`, il faut arrêter le chronomètre si l'utilisateur appuye sur le bouton menu :
 
-<div class="filename" >GBPlatformer01.ino</div>
+<div class="filename" >GBPlatformer01.ino <span>/!\ Scroll horizontal /!\</span></div>
 ```
-case PLAY_STATE:
-  if(hero.state == ON_THE_PLATFORM_STATE) {
-    stateOfGame = manageCommands(hero);
-    if(stateOfGame == PAUSE_STATE) {
-      myTimer.activateTimer = false;
-    }
-  }
-  
-  // ...
+void loop() {
+  // boucle d'attente
+  gb.waitForUpdate();
 
-  if( stateOfGame != PAUSE_STATE ) {
-    if( isEndOfGame(setOfObjects[1]) ) {
-      stateOfGame = SAVE_HIGH_SCORE_STATE;
-    } else {
-      stateOfGame = ( isGameOver(myTimer) ? GAME_OVER_STATE : PLAY_STATE );
-    }
+  // effacer l'écran
+  gb.display.clear();
+
+  switch(stateOfGame) {
+    // ...
+    case PLAY_STATE:
+      if(hero.state == ON_THE_PLATFORM_STATE) {
+        stateOfGame = manageCommands(hero);
+        if(stateOfGame == PAUSE_STATE) {
+          myTimer.activateTimer = false;
+        }
+      }
+      
+      // ...
+
+      if( stateOfGame != PAUSE_STATE ) {
+        if( isEndOfGame(setOfObjects[1]) ) {
+          stateOfGame = SAVE_HIGH_SCORE_STATE;
+        } else {
+          stateOfGame = ( isGameOver(myTimer) ? GAME_OVER_STATE : PLAY_STATE );
+        }
+      }
+      break;
+    // ...
+    default:
+      gb.display.println("Votre message");
   }
-  break;
+}
 ```
 
 Ajoutons l'état `PAUSE_STATE` :
 
 <div class="filename" >GBPlatformer01.ino</div>
 ```
-case PAUSE_STATE:
-  stateOfGame = manageCommandsForPause();
-  paintPause();
-  break;
+void loop() {
+  // boucle d'attente
+  gb.waitForUpdate();
+
+  // effacer l'écran
+  gb.display.clear();
+
+  switch(stateOfGame) {
+    // ...
+    case PAUSE_STATE:
+      stateOfGame = manageCommandsForPause();
+      paintPause();
+      break;
+    default:
+      gb.display.println("Votre message");
+  }
+}
 ```
 
 Ajoutons l'état `GO_BACK_GAME_STATE` :
 
 <div class="filename" >GBPlatformer01.ino</div>
 ```
-case GO_BACK_GAME_STATE:
-  myTimer.activateTimer = true;
-  stateOfGame = PLAY_STATE;
-  break;
+void loop() {
+  // boucle d'attente
+  gb.waitForUpdate();
+
+  // effacer l'écran
+  gb.display.clear();
+
+  switch(stateOfGame) {
+    // ...
+    case GO_BACK_GAME_STATE:
+      myTimer.activateTimer = true;
+      stateOfGame = PLAY_STATE;
+      break;
+    default:
+      gb.display.println("Votre message");
+  }
+}
 ```
 
 Lorsque l'état est indéfini, nous allons ajouter une redirection vers l'état d'accueil :
 
 <div class="filename" >GBPlatformer01.ino</div>
 ```
-default:
-  // afficher un texte...
+void loop() {
+  // boucle d'attente
+  gb.waitForUpdate();
 
-  delay(3000);
-  stateOfGame = HOME_STATE;
+  // effacer l'écran
+  gb.display.clear();
+
+  switch(stateOfGame) {
+    // ...
+    default:
+      // afficher un texte...
+
+      delay(3000);
+      stateOfGame = HOME_STATE;
+  }
+}
 ```
 
 
@@ -731,7 +1019,7 @@ default:
 
 Vous voici arrivé à la fin de cette cinquième étape où nous avons ajouté la gestion de la partie.
 
-Si vous avez terminé ou si vous rencontrez des problèmes vous pouvez télécharger la solution [ici](https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v5.0.zip).
+Si vous avez terminé ou si vous rencontrez des problèmes vous pouvez télécharger la solution <a href="https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v5.0.zip" class="external-link" >ici</a>.
 
 Dans la prochaine et dernière étape, c'est-à-dire la sixième, nous aborderons la gestion d'un tableau de meilleurs scores.
 
