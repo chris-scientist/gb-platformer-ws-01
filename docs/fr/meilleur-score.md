@@ -13,7 +13,7 @@ lang: fr
 
 Dans cette sixième et dernière étape, nous allons implémenter : la gestion des meilleurs scores, avec les interfaces nécessaires à l'ajout de cette fonctionnalité.
 
-*Je vous invite à télécharger [le code](https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v5.0.zip) qui est le résultat de la cinquième étape afin de partir sur des bases communes.*
+*Je vous invite à télécharger <a href="https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v5.0.zip" class="external-link" >le code</a> qui est le résultat de la cinquième étape afin de partir sur des bases communes.*
 
 ## Quelques spécifications
 
@@ -66,6 +66,7 @@ Nous appelerons la seconde structure  `HighScoreManager` et nous la placerons da
 #ifndef PLATFORMER_HIGH_SCORE_MANAGER
 #define PLATFORMER_HIGH_SCORE_MANAGER
 
+#include <Gamebuino-Meta.h>
 #include "HighScore.h"
 
 struct HighScoreManager {
@@ -89,12 +90,16 @@ Ainsi dans `HighScore.h`, nous allons créer la fonction `setHighScore` :
 
 <div class="filename" >HighScore.h</div>
 ```
-void setHighScore(HighScore &aHighScore, char * aName, int32_t aScore);
+void setHighScore(
+  HighScore &aHighScore, 
+  char * aName, 
+  int32_t aScore
+);
 ```
 
 Dans `HighScore.cpp`, après avoir inclus `HighScore.h`, définissons la fonction `setHighScore` :
 
-<div class="filename" >HighScore.cpp</div>
+<div class="filename" >HighScore.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
 void setHighScore(HighScore &aHighScore, char * aName, int32_t aScore) {
   strncpy(aHighScore.nameOfScore, aName, 6);
@@ -127,16 +132,35 @@ Dans le programme principal, pensez à inclure `HighScoreManager.h` et instancio
 
 <div class="filename" >GBPlatformer01.ino</div>
 ```
+// Autres includes...
+#include "HighScoreManager.h"
+
+// Autres variables gloables...
 HighScoreManager highScoreManager;
+
+void setup() {
+  // ...
+}
+
+void loop() {
+  // ...
+}
 ```
 
 Puis, toujours dans le programme principal,  appelons l'initialisation dans la fonction `setup` :
 
 <div class="filename" >GBPlatformer01.ino</div>
 ```
-initHighScoreManager(highScoreManager);
-```
+void setup() {
+  // initialisation de la Gamebuino META
+  gb.begin();
 
+  createTimer(myTimer);
+  initHighScoreManager(highScoreManager);
+
+  stateOfGame = HOME_STATE;
+}
+```
 
 ### Charger les meilleurs scores enregistrés
 
@@ -165,13 +189,17 @@ Dans `HighScoreManager.h`, créons la fonction `loadHighScore` :
 
 <div class="filename" >HighScoreManager.h</div>
 ```
-void loadHighScore(HighScore &aScore, uint16_t aBlockName, uint16_t aBlockScore);
+void loadHighScore(
+  HighScore &aScore, 
+  uint16_t aBlockName, 
+  uint16_t aBlockScore
+);
 ```
 
 
 Dans `HighScoreManager.cpp`, définissons la fonction `loadHighScore` :
 
-<div class="filename" >HighScoreManager.cpp</div>
+<div class="filename" >HighScoreManager.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
 void loadHighScore(HighScore &aScore, uint16_t aBlockName, uint16_t aBlockScore) {
   char temp[5];
@@ -189,7 +217,7 @@ void loadAllHighScore(HighScoreManager &aManager);
 
 Dans `HighScoreManager.cpp`, implémentons la fonction `loadAllHighScore` :
 
-<div class="filename" >HighScoreManaher.cpp</div>
+<div class="filename" >HighScoreManaher.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
 void loadAllHighScore(HighScoreManager &aManager) {
   int32_t nbHighScoreSaved = gb.save.get(NB_HIGH_SCORE_BLOCK);
@@ -222,7 +250,16 @@ Dans le programme principal, dans la fonction `setup`, après l'initialisation d
 
 <div class="filename" >GBPlatformer01.ino</div>
 ```
-loadAllHighScore(highScoreManager);
+void setup() {
+  // initialisation de la Gamebuino META
+  gb.begin();
+
+  createTimer(myTimer);
+  initHighScoreManager(highScoreManager);
+  loadAllHighScore(highScoreManager);
+
+  stateOfGame = HOME_STATE;
+}
 ```
 
 
@@ -248,9 +285,32 @@ void resetIndexNewHighScore(HighScoreManager &aManager) {
 
 Dans le programme principal, dans l'état `LAUNCH_PLAY_STATE` de la fonction `loop`, ajoutons la fonction que nous venons de définir :
 
-<div class="filename" >GBPlatformer01.ino</div>
+<div class="filename" >GBPlatformer01.ino <span>/!\ Scroll horizontal /!\</span></div>
 ```
-resetIndexNewHighScore(highScoreManager); // ... on réinitialise le tableau de meilleurs scores
+void loop() {
+  // boucle d'attente
+  gb.waitForUpdate();
+
+  // effacer l'écran
+  gb.display.clear();
+
+  switch(stateOfGame) {
+    case HOME_STATE:
+      stateOfGame = paintMenu();
+      break;
+    case LAUNCH_PLAY_STATE:
+      resetIndexNewHighScore(highScoreManager); // ... on réinitialise le tableau de meilleurs scores
+      resetTimer(myTimer); // ............. on réinitialise le chronomètre
+      initObjects(setOfObjects); // ....... on réinitialise les objets
+      initPlatforms(setOfPlatforms); // ... on réinitialise les plateformes
+      initCharacter(hero);
+      stateOfGame = PLAY_STATE;
+      break;
+    // ...
+    default:
+      gb.display.println("Votre message");
+  }
+}
 ```
 
 ### Le temps réalisé fait-il partie des meilleurs scores ?
@@ -309,12 +369,15 @@ Nous allons créer la fonction `swapHighScore` dans `HighScoreManager.h` :
 
 <div class="filename" >HighScoreManager.h</div>
 ```
-void swapHighScore(HighScore &aHighScore, const HighScore & aNewHighScore);
+void swapHighScore(
+  HighScore &aHighScore, 
+  const HighScore & aNewHighScore
+);
 ```
 
 Dans `HighScoreManager.cpp`, définissons la fonction `swapHighScore` :
 
-<div class="filename" >HighScoreManager.cpp</div>
+<div class="filename" >HighScoreManager.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
 void swapHighScore(HighScore &aHighScore, const HighScore & aNewHighScore) {
   strncpy(aHighScore.nameOfScore, aNewHighScore.nameOfScore, 6);
@@ -333,12 +396,15 @@ Voici le prototype de la fonction `compareTime`, à écrire dans `HighScore.h` :
 
 <div class="filename" >HighScore.h</div>
 ```
-int8_t compareTime(const HighScore &aScore, const int32_t aTimeInSeconds);
+int8_t compareTime(
+  const HighScore &aScore, 
+  const int32_t aTimeInSeconds
+);
 ```
 
 Implémentons cette fonction :
 
-<div class="filename" >HighScore.cpp</div>
+<div class="filename" >HighScore.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
 int8_t compareTime(const HighScore &aScore, const int32_t aTimeInSeconds) {
   if(aScore.score == aTimeInSeconds) {
@@ -375,14 +441,17 @@ Le prototype de cette fonction est le suivant :
 
 <div class="filename" >HighScoreManager.h</div>
 ```
-const uint8_t setHighScore4Time(HighScoreManager &aManager, const int32_t aTimeOfPart);
+const uint8_t setHighScore4Time(
+  HighScoreManager &aManager, 
+  const int32_t aTimeOfPart
+);
 ```
 
 Elle prend en paramètre le gestionnaire de meilleurs scores puisque nous aurons probablement à le modifier et la durée de la partie que le joueur vient de finir.
 
 Avant de vous fournir son implémentation, voici son pseudo code :
 
-<div class="filename" >Pseudo code</div>
+<div class="filename" >Pseudo code <span>/!\ Scroll horizontal /!\</span></div>
 ```
 // Légende :
 // nb(HS) pour nombre de meilleurs scores
@@ -445,7 +514,7 @@ retourner index
 
 Développons cette fonction :
 
-<div class="filename" >HighScoreManager.cpp</div>
+<div class="filename" >HighScoreManager.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
 const uint8_t setHighScore4Time(HighScoreManager &aManager, const int32_t aTimeOfPart) {
   uint8_t highScoreIndex = NO_HIGH_SCORE;
@@ -533,12 +602,17 @@ D'abord, créons la fonction qui effectue la sauvergade unitaire d'un meilleur s
 
 <div class="filename" >HighScoreManager.h</div>
 ```
-void saveHighScore(char * aName, int32_t aScore, uint16_t aBlockName, uint16_t aBlockScore);
+void saveHighScore(
+  char * aName, 
+  int32_t aScore, 
+  uint16_t aBlockName, 
+  uint16_t aBlockScore
+);
 ```
 
 Dans `HighScoreManager.cpp`, définissons cette fonction :
 
-<div class="filename" >HighScoreManager.cpp</div>
+<div class="filename" >HighScoreManager.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
 void saveHighScore(char * aName, int32_t aScore, uint16_t aBlockName, uint16_t aBlockScore) {
   gb.save.set(aBlockName, aName);
@@ -555,7 +629,7 @@ void saveAllHighScore(HighScoreManager &aManager);
 
 Implémentons cette fonction dans `HighScoreManager.cpp` :
 
-<div class="filename" >HighScoreManager.cpp</div>
+<div class="filename" >HighScoreManager.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
 void saveAllHighScore(HighScoreManager &aManager) {
   switch(aManager.nbHighScore) {
@@ -580,12 +654,15 @@ Avant de passer à l'affichage des meilleurs scores, écrivons la fonction qui d
 
 <div class="filename" >HighScoreManager.h</div>
 ```
-bool saveScoreIfNewHighScore(HighScoreManager &aManager, const int32_t aTimeOfPart);
+bool saveScoreIfNewHighScore(
+  HighScoreManager &aManager, 
+  const int32_t aTimeOfPart
+);
 ```
 
 Définissons cette fonction dans `HighScoreManager.cpp` :
 
-<div class="filename" >HighScoreManager.cpp</div>
+<div class="filename" >HighScoreManager.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
 bool saveScoreIfNewHighScore(HighScoreManager &aManager, const int32_t aTimeOfPart) {
   // Comparer le score actuel aux scores en mémoire
@@ -611,12 +688,15 @@ Pour gérer l'affichage, nous allons avoir besoin d'une fonction qui retourne le
 
 <div class="filename" >HighScoreManager.h</div>
 ```
-const HighScore& getHighScore(const HighScoreManager &aManager, uint8_t anIndex);
+const HighScore& getHighScore(
+  const HighScoreManager &aManager, 
+  uint8_t anIndex
+);
 ```
 
 Développons cette fonction dans `HighScoreManager.cpp` :
 
-<div class="filename" >HighScoreManager.cpp</div>
+<div class="filename" >HighScoreManager.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
 const HighScore& getHighScore(const HighScoreManager &aManager, uint8_t anIndex) {
   switch(anIndex) {
@@ -640,7 +720,7 @@ void paintHighScoreWindow(const HighScoreManager& aScoreManager);
 
 Définissons cette fonction dans `HighScoreManager.cpp` :
 
-<div class="filename" >HighScoreManager.cpp</div>
+<div class="filename" >HighScoreManager.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
 void paintHighScoreWindow(const HighScoreManager& aScoreManager) {
   gb.display.setFontSize(1);
@@ -726,18 +806,49 @@ Nous allons gérer l'état `HIGH_SCORE_STATE` qui permet d'afficher les meilleur
 
 <div class="filename" >GBPlatformer01.ino</div>
 ```
-case HIGH_SCORE_STATE:
-  stateOfGame = manageCommandsOutOfGame(stateOfGame);
-  
-  paintHighScoreWindow(highScoreManager);
-  break;
+void loop() {
+  // boucle d'attente
+  gb.waitForUpdate();
+
+  // effacer l'écran
+  gb.display.clear();
+
+  switch(stateOfGame) {
+    // ...
+    case HIGH_SCORE_STATE:
+      stateOfGame = manageCommandsOutOfGame(stateOfGame);
+      
+      paintHighScoreWindow(highScoreManager);
+      break;
+    default:
+      gb.display.println("Votre message");
+  }
+}
 ```
 
 Dans l'état `SAVE_HIGH_SCORE_STATE`, ajoutons la redirection vers l'écran d'affichage des meilleurs scores s'il y a un nouveau meilleur score :
 
-<div class="filename" >GBPlatformer01.ino</div>
+<div class="filename" >GBPlatformer01.ino <span>/!\ Scroll horizontal /!\</span></div>
 ```
-stateOfGame = (saveScoreIfNewHighScore(highScoreManager, myTimer.timeInMilliseconds) ? HIGH_SCORE_STATE : GAME_IS_FINISH_STATE);
+void loop() {
+  // boucle d'attente
+  gb.waitForUpdate();
+
+  // effacer l'écran
+  gb.display.clear();
+
+  switch(stateOfGame) {
+    // ...
+    case SAVE_HIGH_SCORE_STATE:
+      myTimer.activateTimer = false;
+      runTimer(myTimer);
+
+      stateOfGame = (saveScoreIfNewHighScore(highScoreManager, myTimer.timeInMilliseconds) ? HIGH_SCORE_STATE : GAME_IS_FINISH_STATE);
+      break;
+    default:
+      gb.display.println("Votre message");
+  }
+}
 ```
 
 Dans `Lang.h`, créons l'item du menu pour accéder aux meilleurs scores :
@@ -773,9 +884,11 @@ Pensez à téléverser le programme vers votre console pour tester cette derniè
 
 ## Conclusion
 
-Vous pouvez télécharger le [code source final](https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v6.0.zip). Vous avez maintenant un jeu de plateforme complet ! Oui c'est pas transcendant au niveau des graphiques mais soyez patient, nous verrons cela ultérieurement, mais (spoiler alerte) ce ne sera pas l'objectif du prochain workshop. Le but avec ce premier workshop était de poser les bases d'un jeu de plateformes, mais ce n'est que le début d'une série...
+Vous pouvez télécharger le <a href="https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v6.0.zip" class="external-link" >code source final</a>. Vous avez maintenant un jeu de plateformes complet ! Oui c'est pas transcendant au niveau des graphiques mais soyez patient, nous verrons cela ultérieurement, mais (spoiler alerte) ce ne sera pas l'objectif du prochain workshop. Le but avec ce premier workshop était de poser les bases d'un jeu de plateformes, mais ce n'est que le début d'une série...
 
-N'hésitez pas à me faire un retour sur cette étape et sur le workshop : vous pouvez réagir [ici](https://gamebuino.com/fr).
+N'hésitez pas à me faire un retour sur cette étape et sur le workshop : 
+
+{% include react-btn.html %}
 
 Vous voici arrivés à la fin de ce workshop, mais restez dans le coin pour réaliser d'autres workshops en attendant la suite de celui-ci.
 C'est en forgeant que l'on devient forgeron ;)
