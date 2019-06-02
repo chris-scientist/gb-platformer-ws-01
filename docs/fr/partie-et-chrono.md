@@ -452,9 +452,42 @@ void runTimer(Timer &aTimer) {
 
 Dans le programme principal, dans l'état `PLAY_STATE`, après la gestion des commandes, ajoutons l'appel de la fonction `runTimer` comme ceci :
 
-<div class="filename" >GBPlatformer01.ino</div>
+<div class="filename" >GBPlatformer01.ino <span>/!\ Scroll horizontal /!\</span></div>
 ```
-runTimer(myTimer);
+void loop() {
+  // boucle d'attente
+  gb.waitForUpdate();
+
+  // effacer l'écran
+  gb.display.clear();
+
+  switch(stateOfGame) {
+    case HOME_STATE:
+      stateOfGame = paintMenu();
+      break;
+    case LAUNCH_PLAY_STATE:
+      // ...
+      break;
+    case PLAY_STATE:
+      if(hero.state == ON_THE_PLATFORM_STATE) {
+        stateOfGame = manageCommands(hero);
+      }
+
+      runTimer(myTimer);
+
+      if(hero.state != JUMP_STATE && hero.state != PUSH_FOR_JUMP_STATE) {
+        gravity(hero, setOfPlatforms);
+      } else if(hero.state == JUMP_STATE || hero.state == PUSH_FOR_JUMP_STATE) {
+        jump(hero, setOfPlatforms);
+      }
+
+      // ...
+      break;
+    default:
+      gb.display.println("Votre message");
+  }
+)
+}
 ```
 
 Nous allons ajouter un nouvel état.
