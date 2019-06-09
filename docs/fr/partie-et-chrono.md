@@ -87,7 +87,7 @@ void loop() {
 
       interactionsWithWorld(hero, setOfObjects);
 
-      paint(hero);
+      paint(hero, setOfPlatforms, setOfObjects);
 
       if( isEndOfGame(setOfObjects[1]) ) {
         stateOfGame = GAME_IS_FINISH_STATE;
@@ -202,6 +202,9 @@ void loop() {
 }
 ```
 
+Vous pouvez téléverser le programme vers votre console, le résultat est le suivant :
+
+![Fin de partie](./../../img/E05/fin_de_partie_v1.gif)
 
 ## Chronomètre
 
@@ -726,6 +729,9 @@ void loop() {
 
 Vous pouvez téléverser le programme vers votre console, vous constaterez alors que le chronomètre "redémarre à zéro" au-delà d'une minute. C'est normal, comme nous affichons que les secondes et les millisecondes, la précision est perdu. C'est un détail que nous règlerons dans la suite de ce workshop. En effet, au-delà de 20 000 millisecondes (c'est-à-dire 20 secondes) nous allons déclencher le "game over".
 
+Attention dans la capture ci-dessous le chronomètre ne démarre pas à zéro ! C'est parce que je lance manuellement la capture et donc le temps c'est écoulé entre le début réel de la partie puis le début de la capture.
+
+![Ajout du chonomètre](./../../img/E05/chrono_v1.gif)
 
 ## Game over
 
@@ -851,6 +857,9 @@ void loop() {
 
 Vous pouvez téléverser le programme sur votre console, lancez une partie, et laissez le temps passer : au-delà de 20 secondes l'écran game over s'affiche.
 
+J'ai commencé la capture ci-dessous après 16 secondes, mon objectif ici est de montrer l'affichage de l'écran "game over" :
+
+![Game over](./../../img/E05/game_over_v1.gif)
 
 ## Navigation
 
@@ -1047,6 +1056,9 @@ void loop() {
 }
 ```
 
+Vous pouvez téléverser le programme vers votre console, le dernier ajout c'est l'écran de pause :
+
+![Gestion pause](./../../img/E05/pause_v1.gif)
 
 ## Conclusion
 

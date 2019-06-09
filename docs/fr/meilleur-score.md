@@ -68,6 +68,7 @@ Nous appelerons la seconde structure  `HighScoreManager` et nous la placerons da
 
 #include <Gamebuino-Meta.h>
 #include "HighScore.h"
+#include "Constants.h"
 
 struct HighScoreManager {
   HighScore highScore1;
@@ -77,7 +78,7 @@ struct HighScoreManager {
   uint8_t indexNewHighScore;
 };
 
-#define
+#endif
 ```
 
 

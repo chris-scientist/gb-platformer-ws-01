@@ -54,7 +54,44 @@ void gravity(Character &aCharacter) {
 
 Dans le programme principal, dans l'état `PLAY_STATE` remplaçons `gb.display.println("GRAVITY");` par `gravity(hero);`.
 
+<div class="filename" >GBPlatformer01.ino <span>/!\ Scroll horizontal /!\</span></div>
+```
+void loop() {
+  // boucle d'attente
+  gb.waitForUpdate();
+
+  // effacer l'écran
+  gb.display.clear();
+
+  switch(stateOfGame) {
+    case HOME_STATE:
+      stateOfGame = paintMenu();
+      break;
+    case LAUNCH_PLAY_STATE:
+      // ...
+      break;
+    case PLAY_STATE:
+      if(hero.state == ON_THE_PLATFORM_STATE) {
+        stateOfGame = manageCommands(hero);
+      }
+
+      if(hero.state != JUMP_STATE && hero.state != PUSH_FOR_JUMP_STATE) {
+        gravity(hero);
+      } else if(hero.state == JUMP_STATE || hero.state == PUSH_FOR_JUMP_STATE) {
+        jump(hero);
+      }
+
+      paint(hero);
+      break;
+    default:
+      gb.display.println("Votre message");
+  }
+)
+```
+
 Téléversez le programme vers votre console et constatez la chute libre (en sautant sur le bord de l'écran).
+
+![Chute libre](./../../img/E03/chute_libre_v1.gif)
 
 Les bases de la chute libre sont maintenant implémentées, passons à la gestion des plateformes.
 
@@ -414,6 +451,8 @@ const uint8_t isOnOnePlatform(const Character &aCharacter) {
 
 Vous pouvez téléverser le programme vers votre console. Vous verrez que votre personnage est dessiné sur le sol, par contre vous pouvez sauter sur les plateformes, mais aucune réaction, vous les traversez. Nous allons y remédier tout de suite.
 
+![Affichage des plateformes, sans gestion des collisions](./../../img/E03/platformes_sans_collisions_v1.gif)
+
 ### Collision avec les plateformes
 
 Pour commencer, nous avons besoin d'une fonction qui indique si le personnage monte ou descend.
@@ -464,7 +503,7 @@ Platform getPlatformFromId(const uint8_t aId, Platform * aSet) {
 
 Ajoutons une fonction qui détermine s'il y a une collision avec la plateforme fournit en paramètre.
 
-Dans `PhysicsEngine.h`, ajoutons le prototype de la fonction `isOnThePlatform` :
+Dans `PhysicsEngine.h`, ajoutons le prototype de la fonction `isOnThePlatform`, il est nécessaire d'inclure `Platform.h` dans `PhysicsEngine.h` :
 
 <div class="filename" >PhysicsEngine.h</div>
 ```
@@ -679,6 +718,8 @@ void loop() {
 ```
 
 Téléversez votre porgramme vers la console, et amusez-vous à sauter sur les plateformes. Si vous avez conserver les valeurs fournies dans cette étape, autant les couleurs que la position des plateformes, vous pouvez être en-dessous de la plateforme verte claire et sauter, pour ainsi monter dessus.
+
+![Affichage des plateformes, avec gestion des collisions](./../../img/E03/platformes_avec_collisions_v1.gif)
 
 ## Conclusion
 

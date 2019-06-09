@@ -110,6 +110,7 @@ if(gb.buttons.repeat(BUTTON_LEFT, 1)) {
 
 Il est important de tester votre programme à chaque fois que vous apportez une modification. Comme nous venons d'implémenter le déplacement à gauche et à droite, téléverser votre programme, et constater que le jeu réagit comme vous le désirez.
 
+![Déplacements gauche et droite](./../../img/E02/deplacements_LeftAndRight_v1.gif)
 
 ## Sauter
 
@@ -249,7 +250,7 @@ const uint8_t isOnOnePlatform(const Character &aCharacter);
 
 Pour l'instant, la fonction `isOnOnePlatform` contrôlera uniquement si nous sommes en collision avec le sol ou non. Nous ferons évoluer cette fonction lors de la prochaine étape.
 
-Voici donc le code pour détecter une collision avec le sol, à écrire dans le fichier `PhysicsEngine.cpp` :
+Voici donc le code pour détecter une collision avec le sol, à écrire dans le fichier `PhysicsEngine.cpp`, pensez à inclure `PhysicsEngine.h` (dans `PhysicsEngine.cpp`) :
 
 <div class="filename" >PhysicsEngine.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
@@ -383,11 +384,18 @@ Le personnage est prêt à sauter, enfin presque ! Effectivement il faut écrire
 
 #### Dernière ligne droite avant de sauter
 
-Retournons dans le programme principal, et en particulier dans l'état `PLAY_STATE` où il est nécessaire d'apporter des modifications. 
+Retournons dans le programme principal, et en particulier dans l'état `PLAY_STATE` où il est nécessaire d'apporter des modifications. Il est nécessaire d'inclure `PhysicsEngine.h` dans le programme principal.
 Le code pour cet état doit être :
 
 <div class="filename" >GBPlatformer01.ino <span>/!\ Scroll horizontal /!\</span></div>
 ```
+// Autres includes...
+#include "PhysicsEngine.h"
+
+void setup() {
+  // ...
+}
+
 void loop() {
   // boucle d'attente
   gb.waitForUpdate();
@@ -423,6 +431,8 @@ void loop() {
 
 Comme vous pouvez le remarquez, le joueur peut agir sur les commandes uniquement s'il est sur une plateforme, soit pour l'instant sur le sol.
 
+![Déplacement : première version du saut](./../../img/E02/deplacements_Jump_v1.gif
+)
 
 #### Quelques réglages
 
@@ -447,6 +457,15 @@ const uint8_t HORIZONTAL_VELOCITY = 2; // ...... vitesse horizontale
 const uint8_t INIT_VERTICAL_VELOCITY = 6; // ... vitesse verticale initiale
 ```
 
+Voici le saut avant callibrage :
+
+![Déplacement : première version du saut](./../../img/E02/deplacements_Jump_v1.gif
+)
+
+Et voici le saut actuel (après callibrage) :
+
+![Déplacement : première version du saut](./../../img/E02/deplacements_NewJump_v1.gif
+)
 
 ## Conclusion
 

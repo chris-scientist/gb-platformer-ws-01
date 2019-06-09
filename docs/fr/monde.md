@@ -27,7 +27,7 @@ Commençons par ajouter des constantes dans `Constants.h` :
 // ...
 const Color KEY_COLOR = YELLOW;
 const Color DOOR_CLOSED_COLOR = GRAY;
-const Color DOOR_OPEN_COLOR = DARKGRAY;
+const Color DOOR_OPENED_COLOR = DARKGRAY;
 
 // Pour une clé de 4 pixels de haut sur 8 pixels de large
 const uint8_t HEIGHT_KEY = 4;
@@ -95,7 +95,7 @@ Object createObject(
 );
 ```
 
-Dans `Object.cpp`, définissons la fonction `createObject` :
+Dans `Object.cpp`, définissons la fonction `createObject`, pensez à inclure `Object.h` (dans `Object.cpp`) :
 
 <div class="filename" >Object.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
@@ -324,6 +324,8 @@ void loop() {
 
 Vous pouvez téléverser votre programme sur votre console, et lancer une partie. Il y a deux nouveaux rectangles : le jaune représente une clé et le gris une porte fermée. Si vous allez ramasser la clé, rien ne se passe, c'est normal ! Nous allons coder les interactions avec les objets dans la suite de cette étape.
 
+![Affichage des objets, sans interactions](./../../img/E04/objets_sans_interactions_v1.gif)
+
 ### Interactions avec les objets
 
 Modifions le personnage, dans `Character.h`, ajoutons-y un attribut pour indiquer si le personnage a ramassé la clé :
@@ -371,7 +373,7 @@ const uint8_t isContactWithObject(
 #endif
 ```
 
-Dans `Interactions.cpp`, ajoutons la définition de la fonction `isContactWithObject` :
+Dans `Interactions.cpp`, ajoutons la définition de la fonction `isContactWithObject`, pensez à inclure `Interactions.h` (dans `Interactions.cpp`) :
 
 <div class="filename" >Interactions.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
@@ -477,6 +479,8 @@ void loop() {
 ```
 
 Téléversez votre programme sur votre console, et constatez maintenant que vous pouvez ramasser la clé puis ouvrir la porte.
+
+![Affichage des objets, avec interactions](./../../img/E04/objets_avec_interactions_v1.gif)
 
 ## Conclusion
 

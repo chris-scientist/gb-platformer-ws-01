@@ -66,7 +66,9 @@ void loop() {
 }
 ```
 
-Téléversez votre programme pour constater l'affichage du message.
+Téléversez votre programme pour constater l'affichage du message, voici le résultat :
+
+![Programme de base](./../../img/E01/home_screen_v1.png)
 
 Vous pouvez télécharger <a href="https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v0.0.zip" class="external-link" >ici le programme de base</a>.
 
@@ -329,7 +331,7 @@ Quelques précisions sur les fonctions qui sont déclarées dans `Display.h` :
 
 La fonction `paint` ne fera pour l'instant qu'un appel à `paintHero`.
 
-Toutes ces fonctions doivent être définies dans `Display.cpp`.
+Toutes ces fonctions doivent être définies dans `Display.cpp`, pensez à inclure `Display.h` (dans `Display.cpp`).
 
 Pour changer la couleur il faut utiliser <a href="https://gamebuino.com/fr/academy/reference/graphics-setcolor" class="external-link" >gb.display.setColor</a> et pour dessiner un rectangle plein il faut utiliser <a href="https://gamebuino.com/fr/academy/reference/graphics-fillrect" class="external-link" >gb.display.fillRect</a>.
 
@@ -425,8 +427,9 @@ void loop() {
 }
 ```
 
-Si vous téléversez votre programme, vous devriez voir un joli rectangle bleu en bas de l'écran : c'est votre personnage !
+Si vous téléversez votre programme, vous devriez voir un joli rectangle bleu en bas de l'écran : c'est votre personnage ! Voici une capture d'écran du jeu :
 
+![Affichage du personnage](./../../img/E01/character_v1.png)
 
 ## Ajouter un menu
 
