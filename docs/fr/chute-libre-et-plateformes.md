@@ -210,7 +210,7 @@ void initPlatforms(Platform * aSet);
 
 Comme vous l'avez vu dans les constantes, nous allons créer quatre plateformes, dont le sol.
 
-Dans `Platform.cpp`, définissons la plateforme `initPlatforms` :
+Dans `Platform.cpp`, définissons la fonction `initPlatforms` :
 
 <div class="filename" >Platform.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
