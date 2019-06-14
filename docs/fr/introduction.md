@@ -65,9 +65,9 @@ Les étapes de ce workshop sont :
 3. chute libre et plateformes ;
 4. interactions avec le monde ;
 5. gestion de la partie et chronomètre ;
-6. meilleurs scores : gestion et affichage
+6. meilleurs scores : gestion et affichage.
 
-Dans ce premier workshop, les éléments : plateformes et objets auront des coordonnées définies par un couple d'entiers. Nous verrons plus tard comment concevoir un monde basé sur du tilemapping. Un exemple de tilemapping est de stocker le niveau dans un tableau de chiffres, cela peut également être un tableau de caractères comme je l'ai montré dans <a href="https://gamebuino.com/fr/academy/workshop/sokoban-vs-poo" class="external-link" >Sokoban</a>. Où chaque élément du tableau (chiffre, caractère,....) sera transformé en une petite image dont l'ensemble formera l'image globale affichée, mais nous reparlerons de cela dans un futur workshop. Et sachez que certains utilisent d'autres techniques comme une image de point de couleur pour définir la place des éléments.
+Dans ce premier workshop, les éléments : plateformes et objets auront des coordonnées définies par un couple d'entiers. Nous verrons plus tard comment concevoir un monde basé sur du tilemapping. Un exemple de tilemapping est de stocker le niveau dans un tableau de chiffres, cela peut également être un tableau de caractères comme je l'ai montré dans <a href="https://gamebuino.com/fr/academy/workshop/sokoban-vs-poo" class="external-link" >Sokoban</a>. Où chaque élément du tableau (chiffre, caractère, ...) sera transformé en une petite image dont l'ensemble formera l'image globale affichée, mais nous reparlerons de cela dans un futur workshop. Et sachez que certains utilisent d'autres techniques comme une image de point de couleur pour définir la place des éléments.
 
 Comme déjà dit, le jeu de plateformes, que nous allons réaliser dans ce premier workshop, sera conçu sur un écran fixe. C'est-à-dire que le personnage n'évoluera pas sur un monde plus grand que l'écran de la META mais nous verrons cette possibilité dans un prochain workshop.
 
