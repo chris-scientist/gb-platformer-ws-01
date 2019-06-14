@@ -175,7 +175,7 @@ const uint8_t HIGH_SCORE_1 = 1;
 const uint8_t HIGH_SCORE_2 = 2;
 const uint8_t HIGH_SCORE_3 = 3;
 
-// Bloc pour sauvegarde les meilleurs scores
+// Bloc pour sauvegarder les meilleurs scores
 const uint16_t NB_HIGH_SCORE_BLOCK = 0;
 const uint16_t NAME_HIGH_SCORE_1_BLOCK = 1;
 const uint16_t SCORE_HIGH_SCORE_1_BLOCK = 2;
@@ -337,7 +337,7 @@ void paintInputPseudoWindow(char * pseudo) {
 }
 ```
 
-Plaçons le prototype de `createNewHighScore` dans `HighScoreManager.h`:
+Plaçons le prototype de `createNewHighScore` dans `HighScoreManager.h` :
 
 <div class="filename" >HighScoreManager.h</div>
 ```
