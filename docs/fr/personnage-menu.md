@@ -42,15 +42,6 @@ void loop() {
   // boucle d'attente
   gb.waitForUpdate();
 
-
-  // ENTREES //
-
-
-  // MISE A JOUR //
-
-
-  // AFFICHAGE //
-
   // Commencer par effacer l'écran
   gb.display.clear();
 
@@ -97,6 +88,8 @@ Si vous ne voyez pas comment implémenter la structure du personnage ou si vous 
 ```
 #ifndef PLATFORMER_CHARACTER
 #define PLATFORMER_CHARACTER
+
+#include <Gamebuino-Meta.h>
 
 struct Character {
   int8_t x;
@@ -230,7 +223,7 @@ void loop() {
 ```
 
 Enfin, modifions le programme dans la fonction `loop` pour :
-* passer à l'état `LAUNCH_PLAY_STATE` lorsque nous sommes dans l'état `HOME_STATE` et que nous appuyons sur le bouton A (nous ajouterons le menu à cet état à la fin de cette étape) ;
+* passer à l'état `LAUNCH_PLAY_STATE` lorsque nous sommes dans l'état `HOME_STATE` (nous ajouterons le menu à cet état à la fin de cette étape) ;
 * lorsque nous sommes dans l'état `LAUNCH_PLAY_STATE` nous devons initialiser les informations du personnage grâce à la fonction `initCharacter` et passer à l'état `PLAY_STATE` ;
 * lorsque nous sommes dans l'état `PLAY_STATE`, il faut afficher les informations du personnage ;
 * par défaut, si nous ne sommes dans aucun de ces états (ce qui ne devrait pas ce produire) alors nous afficherons le texte de départ.
@@ -391,7 +384,7 @@ void paint(Character &aCharacter) {
 }
 ```
 
-Retournons dans le programme principale. N'oubliez pas d'inclure `Display.h` ! Remplacons l'affichage des informations du personnage par l'affichage du jeu, soit le code suivant :
+Retournons dans le programme principale. N'oubliez pas d'inclure `Display.h` ! Remplaçons l'affichage des informations du personnage par l'affichage du jeu, soit le code suivant :
 
 <div class="filename" >GBPlatformer01.ino</div>
 ```
@@ -474,7 +467,32 @@ const uint8_t paintMenu() {
 }
 ```
 
-Dans le programme principal, remplacez `stateOfGame = LAUNCH_PLAY_STATE;` par `stateOfGame = paintMenu();`, rappelez vous c'est dans l'état `HOME_STATE`.
+Dans le programme principal, remplacez `stateOfGame = LAUNCH_PLAY_STATE;` par `stateOfGame = paintMenu();`, rappelez vous c'est dans l'état `HOME_STATE`, voici le code :
+
+<div class="filename" >GBPlatformer01.ino</div>
+```
+void loop() {
+  // boucle d'attente
+  gb.waitForUpdate();
+
+  // effacer l'écran
+  gb.display.clear();
+
+  switch(stateOfGame) {
+    case HOME_STATE:
+      stateOfGame = paintMenu();
+      break;
+    case LAUNCH_PLAY_STATE:
+      // ...
+      break;
+    case PLAY_STATE:
+      paint(hero);
+      break;
+    default:
+      gb.display.println("Votre message");
+  }
+}
+```
 
 En complément de ce menu, nous allons ajouter une commande permettant de revenir au menu lorsque le jeu est en cours. Pour cela, créons le fichier `Commands.h` avec le code suivant :
 
@@ -546,7 +564,7 @@ void loop() {
 }
 ```
 
-Vous pouvez téléverser votre programme sur la console, vous aurez au démarrage du jeu un menu avec l'item "Jouer", qui permet de lancer le jeu. Pendant le jeu vous pouvez revenir au menu grâce au bouton menu.
+Vous pouvez téléverser votre programme sur la console, vous aurez au démarrage du jeu un menu avec l'item "Play", qui permet de lancer le jeu. Pendant le jeu vous pouvez revenir au menu grâce au bouton menu.
 
 
 ## Conclusion
