@@ -18,7 +18,7 @@ Dans cette cinquième étape, nous allons implémenter : la fin de partie, un ch
 
 ## Fin de partie
 
-Dans le fichier `Constants.h` ajoutons la constante GAME_IS_FINISH_STATE, un nouvel état indiquant que le jeu est fini :
+Dans le fichier `Constants.h` ajoutons la constante `GAME_IS_FINISH_STATE`, un nouvel état indiquant que le jeu est fini :
 
 <div class="filename" >Constants.h</div>
 ```
@@ -540,7 +540,7 @@ void loop() {
 }
 ```
 
-Toujours dans le programme principal, ajoutons un nouvel état, pour l'instant, dans cet état :
+Toujours dans le programme principal, ajoutons l'état `SAVE_HIGH_SCORE_STATE`, pour l'instant, dans cet état :
 * nous arrêterons le chronomètre ;
 * et nous redirigerons vers l'état `GAME_IS_FINISH_STATE`.
 
