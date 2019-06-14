@@ -53,13 +53,18 @@ Pour faire un incrément d'une unité nous utiliserons le raccourci suivant `aCh
 
 Dans la définition de la fonction `manageCommands` dont il faut penser à ajouter le personnage en paramètre, ajoutons le code suivant :
 
-<div class="filename" >Commands.cpp</div>
+<div class="filename" >Commands.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
-if(gb.buttons.repeat(BUTTON_RIGHT, 1)) {
-  if(aCharacter.x < (gb.display.width() - UNDER_CENTER_X_HERO)) {
-    aCharacter.x++;
-    aCharacter.toTheLeft = false;
+const uint8_t manageCommands(Character &aCharacter) {
+
+  if(gb.buttons.repeat(BUTTON_RIGHT, 1)) {
+    if(aCharacter.x < (gb.display.width() - UNDER_CENTER_X_HERO)) {
+      aCharacter.x++;
+      aCharacter.toTheLeft = false;
+    }
   }
+  
+  return (gb.buttons.pressed(BUTTON_MENU) ? HOME_STATE : PLAY_STATE);
 }
 ```
 
@@ -95,16 +100,53 @@ Voici les deux astuces qui couplées au code de déplacement à droite devrait v
 
 Pour aller à gauche, voici le code à écrire dans la fonction `manageCommands` :
 
-<div class="filename" >Commands.cpp</div>
+<div class="filename" >Commands.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
-if(gb.buttons.repeat(BUTTON_LEFT, 1)) {
-  if(aCharacter.x > OVER_CENTER_X_HERO) {
-    aCharacter.x--;
-    aCharacter.toTheLeft = true;
+const uint8_t manageCommands(Character &aCharacter) {
+
+  if(gb.buttons.repeat(BUTTON_RIGHT, 1)) {
+    if(aCharacter.x < (gb.display.width() - UNDER_CENTER_X_HERO)) {
+      aCharacter.x++;
+      aCharacter.toTheLeft = false;
+    }
+  } else if(gb.buttons.repeat(BUTTON_LEFT, 1)) {
+    if(aCharacter.x > OVER_CENTER_X_HERO) {
+      aCharacter.x--;
+      aCharacter.toTheLeft = true;
+    }
   }
+  
+  return (gb.buttons.pressed(BUTTON_MENU) ? HOME_STATE : PLAY_STATE);
 }
 ```
 
+Avant de tester, pensez à mettre à jour le programme principal, en particulier l'appel de la fonction `manageCommands` dans l'état `PLAY_STATE` :
+
+<div class="filename" >GBPlatformer01.ino</div>
+```
+void loop() {
+  // boucle d'attente
+  gb.waitForUpdate();
+
+  // effacer l'écran
+  gb.display.clear();
+
+  switch(stateOfGame) {
+    case HOME_STATE:
+      stateOfGame = paintMenu();
+      break;
+    case LAUNCH_PLAY_STATE:
+      // ...
+      break;
+    case PLAY_STATE:
+      stateOfGame = manageCommands(hero);
+      paint(hero);
+      break;
+    default:
+      gb.display.println("Votre message");
+  }
+}
+```
 
 ### Tester !
 
@@ -126,7 +168,7 @@ Avant de se lancer dans le développement du saut répondant à ses spécificati
 Pour implémenter le saut nous allons avoir besoin d'ajouter à notre personnage :
 * Une vitesse horizontale, qui selon sa valorisation nous permettra de faire le saut en cloche ou non, nommons la `vx`.
 * Une vitesse verticale, qui nous permettra d'évoluer dans l'air, nommons la `vy`.
-* L'ancienne valeur en y que nous appelerons `oldY`que nous utiliserons surtout dans la prochaine étape.
+* L'ancienne valeur en y que nous appelerons `oldY` que nous utiliserons surtout dans la prochaine étape.
 * L'état du personnage : sur le sol (c'est-à-dire sur une plateforme), s'il donne une impulsion pour sauter ou s'il saute, nommons le `state`.
 
 Voyons les principales étapes du saut :
@@ -297,18 +339,22 @@ Pour gérer l'élan, nous allons modifier la fonction `manageCommands` (qui est 
 
 <div class="filename" >Commands.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
-aCharacter.vx = 0; // par défaut, pas de vitesse horizontale
+const uint8_t manageCommands(Character &aCharacter) {
+  aCharacter.vx = 0; // par défaut, pas de vitesse horizontale
 
-if(gb.buttons.repeat(BUTTON_RIGHT, 1)) {
-  if(aCharacter.x < (gb.display.width() - UNDER_CENTER_X_HERO)) {
-    /* ... */
-    aCharacter.vx = HORIZONTAL_VELOCITY; // vitesse horizontale positive pour aller à droite
+  if(gb.buttons.repeat(BUTTON_RIGHT, 1)) {
+    if(aCharacter.x < (gb.display.width() - UNDER_CENTER_X_HERO)) {
+      /* ... */
+      aCharacter.vx = HORIZONTAL_VELOCITY; // vitesse horizontale positive pour aller à droite
+    }
+  } else if(gb.buttons.repeat(BUTTON_LEFT, 1)) {
+    if(aCharacter.x > OVER_CENTER_X_HERO) {
+      /* ... */
+      aCharacter.vx = -HORIZONTAL_VELOCITY; // vitesse horizontale négative pour aller à gauche
+    }
   }
-} else if(gb.buttons.repeat(BUTTON_LEFT, 1)) {
-  if(aCharacter.x > OVER_CENTER_X_HERO) {
-    /* ... */
-    aCharacter.vx = -HORIZONTAL_VELOCITY; // vitesse horizontale négative pour aller à gauche
-  }
+
+  return (gb.buttons.pressed(BUTTON_MENU) ? HOME_STATE : PLAY_STATE);
 }
 ```
 
