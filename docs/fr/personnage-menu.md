@@ -3,7 +3,7 @@ layout: step
 title: "Le personnage : création, affichage et gestion d'un menu"
 permalink: /fr/personnage-menu/
 next: /fr/deplacements/
-link-other-lang: /en/introduction/
+link-other-lang: /en/character-menu/
 lang: fr
 ---
 
@@ -20,7 +20,7 @@ Dans cette étape, nous allons créer un personnage, l'afficher et nous verrons 
 Avant de créer le personnage, il faut écrire le programme de base comme nous l'avons vu dans l'<a href="https://gamebuino.com/fr/academy/workshop/tap-tap-how-fast-can-you-tap/inputs-update-draw" class="external-link" >étape 2 de TapTap, un jeu ou il faut aller très vite</a> !
 
 Pour rappel, il nous faut :
-* inclure le fichier `Gamebuino-Meta.h` en début de code
+* inclure le fichier `Gamebuino-Meta.h` en début de code ;
 * penser à initialiser la Gamebuino META dans la fonction `setup` ;
 * ajouter une boucle d'attente dans la fonction `loop` ;
 * effacer l'écran toujours dans la fonction `loop`.
@@ -159,7 +159,6 @@ void initCharacter(Character &aCharacter) {
   aCharacter.toTheLeft = false;
 }
 ```
-
 
 ### Programme principal
 

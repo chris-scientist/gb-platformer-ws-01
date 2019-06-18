@@ -2,7 +2,7 @@
 layout: step
 title: Introduction
 permalink: /en/introduction/
-next: /en/end/
+next: /en/character-menu/
 link-other-lang: /fr/introduction/
 lang: en
 ---
