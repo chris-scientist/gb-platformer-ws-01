@@ -3,7 +3,7 @@ layout: step
 title: "Gestion de la partie et chronomètre"
 permalink: /fr/partie-et-chrono/
 next: /fr/meilleur-score/
-link-other-lang: /en/introduction/
+link-other-lang: /en/game-and-timer/
 lang: fr
 ---
 

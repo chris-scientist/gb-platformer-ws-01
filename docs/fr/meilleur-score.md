@@ -3,7 +3,7 @@ layout: step
 title: "Quel sera votre meilleur score ?"
 permalink: /fr/meilleur-score/
 next: /fr/fin/
-link-other-lang: /en/introduction/
+link-other-lang: /en/best-score/
 lang: fr
 ---
 

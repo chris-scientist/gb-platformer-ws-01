@@ -3,7 +3,7 @@ layout: step
 title: "Interactions avec le monde"
 permalink: /fr/monde/
 next: /fr/partie-et-chrono/
-link-other-lang: /en/introduction/
+link-other-lang: /en/interactions-with-world/
 lang: fr
 ---
 

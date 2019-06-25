@@ -3,7 +3,7 @@ layout: step
 title: "Gestion des déplacements"
 permalink: /fr/deplacements/
 next: /fr/chute-libre-et-plateformes/
-link-other-lang: /en/introduction/
+link-other-lang: /en/movements/
 lang: fr
 ---
 

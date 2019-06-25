@@ -3,7 +3,7 @@ layout: step
 title: "Chute libre et plateformes"
 permalink: /fr/chute-libre-et-plateformes/
 next: /fr/monde/
-link-other-lang: /en/introduction/
+link-other-lang: /en/free-fall-and-platforms/
 lang: fr
 ---
 

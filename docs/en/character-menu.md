@@ -2,7 +2,7 @@
 layout: step
 title: "The character : creation, display and management of a menu"
 permalink: /en/character-menu/
-next: /en/end/
+next: /en/movements/
 link-other-lang: /fr/personnage-menu/
 lang: en
 ---
