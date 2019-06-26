@@ -71,11 +71,9 @@ const uint8_t manageCommands(Character &aCharacter) {
 Vous pouvez téléverser votre programme vers votre console. Quand vous maintenez le bouton droit enfoncé, vous constatez que votre personnage va se déplacer vers la droite jusqu'à ce qu'il atteigne le bord droit de l'écran. 
 Voilà une première partie du déplacement est développée.
 
-
 ### Avancer à gauche
 
 Je vous propose maintenant de coder le déplacement vers la gauche en autonomie. Si vous n'y arrivez pas, je vous donnerais dans un premier temps quelques astuces. Si vous ne voyez toujours pas comment faire ou que vous souhaitez vérifier votre code : je vous donne la solution.
-
 
 #### Avancer à gauche : quelques pistes
 
@@ -94,7 +92,6 @@ aCharacter.x--;
 ```
 
 Voici les deux astuces qui couplées au code de déplacement à droite devrait vous permettre d'écrire le déplacement à gauche.
-
 
 #### Avancer à gauche : la solution
 
@@ -172,9 +169,9 @@ Pour implémenter le saut nous allons avoir besoin d'ajouter à notre personnage
 * L'état du personnage : sur le sol (c'est-à-dire sur une plateforme), s'il donne une impulsion pour sauter ou s'il saute, nommons le `state`.
 
 Voyons les principales étapes du saut :
-1. Le joueur donne l'ordre de sauter, l'état du joueur passe à l'état `PUSH_FOR_JUMP_STATE`.
+1. Le joueur donne l'ordre de sauter, l'état du personnage passe à l'état `PUSH_FOR_JUMP_STATE`.
 2. Lors de l'impulsion, initialiser la vitesse verticale avec la vitesse verticale initiale (nous utiliserons une constante pour cette dernière).
-3. Changer l'état du joueur à l'état `JUMP_STATE`.
+3. Changer l'état du personnage à l'état `JUMP_STATE`.
 4. Commencer le saut.
 5. Tant que le personnage est en l'air, continuer le saut.
 6. Si le personnage est en dehors de l'écran, alors on annule le saut et on fait jouer la gravité (nous implémenterons la gravité dans la prochaine étape).
@@ -189,9 +186,7 @@ De plus, il faut initialiser la vitesse verticale soit `vy = -vy0;` avec `vy0` l
 
 N'ayez pas peur de toute cette théorie, nous allons passer à l'implémentation.
 
-
 ### Sauter : la pratique
-
 
 #### Evolution du personnage
 
@@ -200,10 +195,10 @@ Avant de faire évoluer le personnage, ajoutons quelques constantes dans notre f
 <div class="filename" >Constants.h <span>/!\ Scroll horizontal /!\</span></div>
 ```
 // Etat du personnage
-const uint8_t ON_THE_PLATFORM_STATE = 0; // ... le joueur est sur le sol
-const uint8_t FREE_FALL_STATE = 1; // ......... le joueur est en chute libre
-const uint8_t PUSH_FOR_JUMP_STATE = 2; // ..... le joueur donne une impulsion pour sauter
-const uint8_t JUMP_STATE = 3; // .............. le joueur saute
+const uint8_t ON_THE_PLATFORM_STATE = 0; // ... le personnage est sur le sol
+const uint8_t FREE_FALL_STATE = 1; // ......... le personnage est en chute libre
+const uint8_t PUSH_FOR_JUMP_STATE = 2; // ..... le personnage donne une impulsion pour sauter
+const uint8_t JUMP_STATE = 3; // .............. le personnage saute
 
 // Identifiants des plateformes
 const uint8_t NO_ID = 0;
@@ -265,7 +260,6 @@ void rectifyPositionY(Character &aCharacter) {
 ```
 
 Bien ! Maintenant que nous avons apporter les modifications nécessaires au personnage, nous devons regarder si nous sommes en collision avec une plateforme ou si nous sautons en dehors de l'écran.
-
 
 #### Une histoire de collisions
 
@@ -332,7 +326,6 @@ bool isOutOfWorld(Character &aCharacter) {
 
 Les limites étant déterminées, passons au développement du saut.
 
-
 ##### Un peu de physique
 
 Pour gérer l'élan, nous allons modifier la fonction `manageCommands` (qui est dans le fichier `Commands.cpp`) :
@@ -362,8 +355,20 @@ Toujours dans la fonction `manageCommands`, il faut écrire le code pour que lor
 
 <div class="filename" >Commands.cpp <span>/!\ Scroll horizontal /!\</span></div>
 ```
-if(gb.buttons.pressed(BUTTON_A) && aCharacter.state != JUMP_STATE) {
-  aCharacter.state = PUSH_FOR_JUMP_STATE;
+const uint8_t manageCommands(Character &aCharacter) {
+  aCharacter.vx = 0; // par défaut, pas de vitesse horizontale
+
+  if(gb.buttons.repeat(BUTTON_RIGHT, 1)) {
+    /* ... */
+  } else if(gb.buttons.repeat(BUTTON_LEFT, 1)) {
+    /* ... */
+  }
+
+  if(gb.buttons.pressed(BUTTON_A) && aCharacter.state != JUMP_STATE) {
+    aCharacter.state = PUSH_FOR_JUMP_STATE;
+  }
+
+  return (gb.buttons.pressed(BUTTON_MENU) ? HOME_STATE : PLAY_STATE);
 }
 ```
 
@@ -414,7 +419,7 @@ void jump(Character &aCharacter) {
     aCharacter.vy = 0;
     aCharacter.state = ON_THE_PLATFORM_STATE;
   } else if( isOutOfWorld(aCharacter) ) {
-    // si le saut nous conduit en dehots du monde
+    // si le saut nous conduit en dehors du monde
     // alors on applique la gravité
     aCharacter.state = FREE_FALL_STATE;
   } else {
@@ -426,7 +431,6 @@ void jump(Character &aCharacter) {
 ```
 
 Le personnage est prêt à sauter, enfin presque ! Effectivement il faut écrire encore un peu de code avant que le personnage ne saute.
-
 
 #### Dernière ligne droite avant de sauter
 
@@ -517,7 +521,7 @@ Et voici le saut actuel (après callibrage) :
 
 Vous voici arrivé à la fin de cette deuxième étape où nous avons ajouté les déplacements pour le personnage : avancer à gauche, avancer à droite et sauter.
 
-Si vous avez terminé ou si vous rencontrez des problèmes vous pouvez télécharger la solution <a href="" class="external-link" >ici</a>.
+Si vous avez terminé ou si vous rencontrez des problèmes vous pouvez télécharger la solution <a href="#" class="external-link" >ici</a>.
 
 Dans la prochaine étape, c'est-à-dire la troisième, nous aborderons la gestion des plateformes de la création à l'affichage, en passant par la gestion des collisions. Et nous implémenterons également la chute libre.
 
