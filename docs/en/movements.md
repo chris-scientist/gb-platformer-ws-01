@@ -152,9 +152,9 @@ It is important to test your program every time you make a change. As we have ju
 
 ## Jump
 
-For the jump, the character will have a different behavior depending on whether you have momentum or not :
-* if the character does not gain momentum, then he will jump on the spot ;
-* if the character gains momentum, then he will make a "bell jump".
+For the jump, the character will have a different behavior depending on whether you have impulse or not :
+* if the character does not gain impulse, then he will jump on the spot ;
+* if the character gains impulse, then he will make a "bell jump".
 
 Before embarking on the development of the jump that meets its specifications, let's look at the theory that will allow us to make such a jump.
 
@@ -326,4 +326,203 @@ With the boundaries determined, let's move on to the development of the jump.
 
 ##### A little bit of physics
 
-**Work in progress...**
+To manage the impulse, we will modify the `manageCommands` function (which is in the `Commands.cpp` file) :
+
+<div class="filename" >Commands.cpp <span>/!\ Horizontal scrolling /!\</span></div>
+```
+const uint8_t manageCommands(Character &aCharacter) {
+  aCharacter.vx = 0; // by default, no horizontal velocity
+
+  if(gb.buttons.repeat(BUTTON_RIGHT, 1)) {
+    if(aCharacter.x < (gb.display.width() - UNDER_CENTER_X_HERO)) {
+      /* ... */
+      aCharacter.vx = HORIZONTAL_VELOCITY; // positive horizontal velocity to go right
+    }
+  } else if(gb.buttons.repeat(BUTTON_LEFT, 1)) {
+    if(aCharacter.x > OVER_CENTER_X_HERO) {
+      /* ... */
+      aCharacter.vx = -HORIZONTAL_VELOCITY; // negative horizontal speed to go left
+    }
+  }
+
+  return (gb.buttons.pressed(BUTTON_MENU) ? HOME_STATE : PLAY_STATE);
+}
+```
+
+Still in the `manageCommands` function, it is necessary to write the code so that when the player presses button A and the character does not jump, the initial impulse for the jump is given, either :
+
+<div class="filename" >Commands.cpp <span>/!\ Horizontal scrolling /!\</span></div>
+```
+const uint8_t manageCommands(Character &aCharacter) {
+  aCharacter.vx = 0; // by default, no horizontal velocity
+
+  if(gb.buttons.repeat(BUTTON_RIGHT, 1)) {
+    /* ... */
+  } else if(gb.buttons.repeat(BUTTON_LEFT, 1)) {
+    /* ... */
+  }
+
+  if(gb.buttons.pressed(BUTTON_A) && aCharacter.state != JUMP_STATE) {
+    aCharacter.state = PUSH_FOR_JUMP_STATE;
+  }
+
+  return (gb.buttons.pressed(BUTTON_MENU) ? HOME_STATE : PLAY_STATE);
+}
+```
+
+Let's create, in `PhysicsEngine.h`, the prototype of the function `jumpMovement`, that is :
+
+<div class="filename" >PhysicsEngine.h</div>
+```
+void jumpMovement(Character &aCharacter);
+```
+
+Let's add in `PhysicsEngine.cpp` the code of `jumpMovement` :
+
+<div class="filename" >PhysicsEngine.cpp <span>/!\ Horizontal scrolling /!\</span></div>
+```
+// Performs the character's movement during the jump
+void jumpMovement(Character &aCharacter) {
+  aCharacter.oldY = aCharacter.y; // ... the previous vertical position is recorded
+  aCharacter.vy += GRAVITY; // ......... we change the vertical velocity
+  aCharacter.x += aCharacter.vx; // .... we change the horizontal position
+  aCharacter.y += aCharacter.vy; // .... we change the vertical position
+}
+```
+
+In `PhysicsEngine.h`, let's add the prototype of the `jump` function, that is :
+
+<div class="filename" >PhysicsEngine.h</div>
+```
+void jump(Character &aCharacter);
+```
+
+The implementation of the `jump` function, to be added in `PhysicsEngine.cpp`, is as follows :
+
+<div class="filename" >PhysicsEngine.cpp</div>
+```
+// Implementation of the character jump
+void jump(Character &aCharacter) {
+  const uint8_t platformId = isOnOnePlatform(aCharacter);
+
+  if(aCharacter.state == PUSH_FOR_JUMP_STATE) {
+    // the player gives an impulse for the jump
+    // we then initialize the data for the jump
+    aCharacter.vy = -INIT_VERTICAL_VELOCITY;
+    aCharacter.state = JUMP_STATE;
+
+    jumpMovement(aCharacter);
+  } else if( platformId != NO_ID) {
+    rectifyPositionY(aCharacter);
+    aCharacter.vy = 0;
+    aCharacter.state = ON_THE_PLATFORM_STATE;
+  } else if( isOutOfWorld(aCharacter) ) {
+    // if the jump leads us out of the world
+    // then we apply gravity
+    aCharacter.state = FREE_FALL_STATE;
+  } else {
+    // the character jump
+    jumpMovement(aCharacter);
+  }
+  
+}
+```
+
+The character is ready to jump, almost ready to jump ! Indeed it is necessary to write some more code before the character jumps.
+
+#### Final straight before jumping
+
+Let's go back to the main program, and in particular to the `PLAY_STATE` report where it is necessary to make changes. It is necessary to include `PhysicsEngine.h` in the main program.
+The code for this state must be :
+
+<div class="filename" >GBPlatformer01.ino <span>/!\ Horizontal scrolling /!\</span></div>
+```
+// Autres includes...
+#include "PhysicsEngine.h"
+
+void setup() {
+  // ...
+}
+
+void loop() {
+  // wainting loop
+  gb.waitForUpdate();
+
+  // clear screen
+  gb.display.clear();
+
+  switch(stateOfGame) {
+    case HOME_STATE:
+      stateOfGame = paintMenu();
+      break;
+    case LAUNCH_PLAY_STATE:
+      // ...
+      break;
+    case PLAY_STATE:
+      if(hero.state == ON_THE_PLATFORM_STATE) {
+        stateOfGame = manageCommands(hero);
+      }
+
+      if(hero.state != JUMP_STATE && hero.state != PUSH_FOR_JUMP_STATE) {
+        gb.display.println("GRAVITY");
+      } else if(hero.state == JUMP_STATE || hero.state == PUSH_FOR_JUMP_STATE) {
+        jump(hero);
+      }
+
+      paint(hero);
+      break;
+    default:
+      gb.display.println("Votre message");
+  }
+)
+```
+
+As you can see, the player can only act on the controls if he is on a platform, which is currently on the ground.
+
+![Movement : first version of the jump](./../../img/E02/deplacements_Jump_v1.gif
+)
+
+#### Some settings
+
+Now you can upload your program to the console, and have fun jumping around. It should be noted that if you jump to the edge of the screen then the game is blocked. We will see in the next step how to solve this problem by implementing gravity / free fall.
+
+Have fun changing the gravity, horizontal speed and initial vertical speed found in `Constants.h`. 
+It is important that you play with it to find the right settings.
+
+I insist ! Try to change these settings !
+
+You may have noticed that the settings provided are too important for a platformer that must be played within the limits of the screen only.
+
+Thus, in `Constants.h`, and after a calibration phase, we have chosen the following settings :
+
+<div class="filename" >Constants.h <span>/!\ Horizontal scrolling /!\</span></div>
+```
+// Gravité
+const uint8_t GRAVITY = 1;
+
+// Paramétrage du saut
+const uint8_t HORIZONTAL_VELOCITY = 2; // ...... horizontal velocity
+const uint8_t INIT_VERTICAL_VELOCITY = 6; // ... initial vertical velocity
+```
+
+This is the jump before callibration :
+
+![Movement : first version of the jump](./../../img/E02/deplacements_Jump_v1.gif
+)
+
+And here is the current jump (after callibration) :
+
+![Movement : first version of the jump after callibration](./../../img/E02/deplacements_NewJump_v1.gif
+)
+
+## Conclusion
+
+You are at the end of this second step where we have added the moves for the character : move left, move right and jump.
+
+If you have finished or are having problems you can download the solution <a href="#" class="external-link" >here</a>.
+
+In the next step, i.e. the third, we will address platform management from creation to display, including collision management. And we will also implement free fall.
+
+Feel free to give me a feedback : the improvements you would make (an outside look is always welcome), the things you didn't understand, the mistakes, etc. To leave a feedback, please add a comment to the following creation :
+
+{% include react-btn.html %}
