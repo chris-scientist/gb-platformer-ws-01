@@ -28,7 +28,7 @@ Dans `PhysicsEngine.h`, ajoutons le prototype de la fonction `gravity` :
 void gravity(Character &aCharacter);
 ```
 
-Implémentons la méthode `gravity` :
+Implémentons la fonction `gravity` :
 
 <div class="filename" >PhysicsEngine.cpp</div>
 ```
@@ -152,7 +152,7 @@ struct Platform {
   uint8_t lengthPlatform; // ... longueur de la plateforme en bloc (doit être au minimum égale à 2), taille des blocs dans le fichier de constantes
   uint8_t type; // ............. type de plateformes : voir constantes
   uint8_t id; // ............... identifiant (unique) de la plateforme
-  bool isGoThrough; // ......... true pour indiquer que le joueur peut passer à travers la plateforme, sinon false
+  bool isGoThrough; // ......... true pour indiquer que le personnage peut passer à travers la plateforme, sinon false
 };
 
 #endif
