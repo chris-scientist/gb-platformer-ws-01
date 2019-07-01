@@ -274,4 +274,452 @@ void loop() {
 
 ### Display of platforms
 
-**Work in progress...**
+Let's start by including `Platform.h` in `Display.h`.
+
+In `Display.h`, let's add the prototype of the `paintGround` function :
+
+<div class="filename" >Display.h</div>
+```
+void paintGround(const int8_t aX, const int8_t aY);
+```
+
+In `Display.cpp`, let's define the function `paintGround` :
+
+<div class="filename" >Display.cpp</div>
+```
+// Performs ground display
+void paintGround(const int8_t aX, const int8_t aY) {
+  paintBox(aX, aY, WIDTH_GROUND, HEIGHT_GROUND, GROUND_COLOR);
+}
+```
+
+In `Display.h`, let's add the prototype of the `paintPlatform` function which aims to draw a floating platform :
+
+<div class="filename" >Display.h</div>
+```
+void paintPlatform(
+  const int8_t aX, const int8_t aY, 
+  const bool isGoThrough
+);
+```
+
+In `Display.cpp`, let's define the function `paintPlatform` :
+
+<div class="filename" >Display.cpp <span>/!\ Horizontal scrolling /!\</span></div>
+```
+// Performs the display of a floating platform
+void paintPlatform(const int8_t aX, const int8_t aY, const bool isGoThrough) {
+  paintBox(aX, aY, WIDTH_PLATFORM, HEIGHT_PLATFORM, (isGoThrough ? PLATFORM_T_COLOR : PLATFORM_NOT_T_COLOR));
+}
+```
+
+In `Display.h`, let's add the prototype of the `paintPlatform` function which directs to the dedicated drawing function :
+
+<div class="filename" >Display.h</div>
+```
+void paintPlatform(const Platform &aPlatform);
+```
+
+In `Display.cpp`, let's define the function `paintPlatform` :
+
+<div class="filename" >Display.cpp</div>
+```
+// Orients to the dedicated drawing function
+void paintPlatform(const Platform &aPlatform) {
+  int8_t x = aPlatform.x - OVER_CENTER_X_PLATFORM;
+  int8_t y = aPlatform.y - OVER_CENTER_Y_PLATFORM;
+  switch(aPlatform.type) {
+    case GROUND_TYPE:
+      x = aPlatform.x - OVER_CENTER_X_GROUND;
+      y = aPlatform.y - OVER_CENTER_Y_GROUND;
+      break;
+  }
+
+  for(uint8_t i = 0 ; i < aPlatform.lengthPlatform ; i++) {
+
+    switch(aPlatform.type) {
+      case GROUND_TYPE:
+        paintGround(x, y);
+        x += WIDTH_GROUND;
+        break;
+      default:
+        paintPlatform(x, y, aPlatform.isGoThrough);
+        x += WIDTH_PLATFORM;
+    }
+    
+  }
+}
+```
+
+In `Display.h`, let's add the prototype of the `paintPlatforms` function that draws all platforms :
+
+<div class="filename" >Display.h</div>
+```
+void paintPlatforms(Platform * aSet);
+```
+
+In `Display.cpp`, let's define the function `paintPlatforms` :
+
+<div class="filename" >Display.cpp</div>
+```
+// Draw all platforms
+void paintPlatforms(Platform * aSet) {
+  for(int i = 0 ; i < NB_OF_PLATFORMS ; i++) {
+    paintPlatform(aSet[i]);
+  }
+}
+```
+
+In `Display.h`, let's modify the prototype of the `paint` function such that :
+
+<div class="filename" >Display.h</div>
+```
+void paint(Character &aCharacter, Platform * aSetOfPlatforms);
+```
+
+In `Display.cpp`, let's change the definition of the `paint` function :
+
+<div class="filename" >Display.cpp</div>
+```
+void paint(Character &aCharacter, Platform * aSetOfPlatforms) {
+  paintPlatforms(aSetOfPlatforms);
+  // dessiner le personnage...
+}
+```
+
+In the main program, let's modify the call of the `paint` method such that :
+
+<div class="filename" >GBPlatformer01.ino</div>
+```
+void loop() {
+  // wainting loop
+  gb.waitForUpdate();
+
+  // clear screen
+  gb.display.clear();
+
+  switch(stateOfGame) {
+    case HOME_STATE:
+      stateOfGame = paintMenu();
+      break;
+    case LAUNCH_PLAY_STATE:
+      // ...
+      break;
+    case PLAY_STATE:
+      // ...
+
+      paint(hero, setOfPlatforms);
+      break;
+    default:
+      gb.display.println("Votre message");
+  }
+)
+```
+
+Before making our platforms "physical", we will modify the position of our character so that it is displayed above the ground.
+
+In `Character.cpp`, modify the `initCharacter` function, in particular the `y` position such that :
+
+<div class="filename" >Character.cpp <span>/!\ Horizontal scrolling /!\</span></div>
+```
+void initCharacter(Character &aCharacter) {
+  // we force the hero's initial position in the middle of the screen and tackle the ground
+  aCharacter.x = 40;
+  aCharacter.y = gb.display.height() - (UNDER_CENTER_Y_HERO + HEIGHT_GROUND);
+
+  // ...
+}
+```
+
+Still in `Character.cpp`, let's modify the `rectifyPositionY` function such that :
+
+<div class="filename" >PhysicsEngine.cpp <span>/!\ Horizontal scrolling /!\</span></div>
+```
+const uint8_t isOnOnePlatform(const Character &aCharacter) {
+  return ( (aCharacter.y + aCharacter.vy) >= (gb.display.height() - (UNDER_CENTER_Y_HERO + HEIGHT_GROUND)) ) ? ID_GROUND : NO_ID ;
+}
+```
+
+You can upload the program to your console. You will see that your character is drawn on the ground, but you can jump on the platforms, but no reaction, you cross them. We will fix it right away.
+
+![Display of platforms, without collision management](./../../img/E03/platformes_sans_collisions_v1.gif)
+
+### Collision with platforms
+
+To begin with, we need a function that indicates whether the character is going up or down.
+
+In `Character.h`, let's add the prototype of the `isFall` function :
+
+<div class="filename" >Character.h</div>
+```
+bool isFall(const Character &aCharacter);
+```
+
+In `Character.cpp`, let's define the function `isFall` :
+
+<div class="filename" >Character.cpp</div>
+```
+// true if the character go down, false if not
+bool isFall(const Character &aCharacter) {
+  return (aCharacter.oldY - aCharacter.y) < 0;
+}
+```
+
+We will also need a function that returns the platform corresponding to the identifier given as a parameter.
+
+In `Platform.h`, let's add the prototype of the function `getPlatformFromId` :
+
+<div class="filename" >Platform.h</div>
+```
+Platform getPlatformFromId(const uint8_t aId, Platform * aSet);
+```
+
+In `Platform.cpp`, let's define the function `getPlatformFromId` :
+
+<div class="filename" >Platform.cpp</div>
+```
+Platform getPlatformFromId(const uint8_t aId, Platform * aSet) {
+
+  for(uint8_t i = 0 ; i < NB_OF_PLATFORMS ; i++) {
+    if(aSet[i].id == aId) {
+      return aSet[i];
+    }
+  }
+
+  Platform nullPlatform;
+  nullPlatform.id = NO_ID;
+  return nullPlatform;
+}
+```
+
+Let's add a function that determines if there is a collision with the platform provided as a parameter.
+
+In `PhysicsEngine.h`, let's add the prototype of the function `isOnThePlatform`, it is necessary to include `Platform.h` in `PhysicsEngine.h` :
+
+<div class="filename" >PhysicsEngine.h</div>
+```
+const uint8_t isOnThePlatform(
+  const Character &aCharacter, 
+  const Platform &aPlatform
+);
+```
+
+In `PhysicsEngine.cpp`, let's define the function `isOnThePlatform` :
+
+<div class="filename" >PhysicsEngine.cpp <span>/!\ Horizontal scrolling /!\</span></div>
+```
+// Détecter si une collision à lieu avec la plateforme en paramètre
+const uint8_t isOnThePlatform(const Character &aCharacter, const Platform &aPlatform) {
+  int8_t xCharacter = aCharacter.x - OVER_CENTER_X_HERO;
+  int8_t yCharacter = aCharacter.y - OVER_CENTER_Y_HERO;
+
+  int8_t xPlatform = aPlatform.x - OVER_CENTER_X_PLATFORM;
+  int8_t yPlatform = aPlatform.y - OVER_CENTER_Y_PLATFORM;
+  uint8_t widthPlatform = WIDTH_PLATFORM;
+  uint8_t heightPlatform = HEIGHT_PLATFORM;
+  switch(aPlatform.type) {
+    case GROUND_TYPE:
+      xPlatform = aPlatform.x - OVER_CENTER_X_GROUND;
+      yPlatform = aPlatform.y - OVER_CENTER_Y_GROUND;
+      widthPlatform = WIDTH_GROUND;
+      heightPlatform = HEIGHT_PLATFORM;
+      break;
+  }
+
+  if(aCharacter.state == JUMP_STATE && !isFall(aCharacter) && aPlatform.isGoThrough) {
+    // Si l'on saute, que l'on monte et que la plateforme peut être traversé
+    // alors on ne déclenche pas la détection de collision
+    return NO_ID;
+  } else if(
+      aCharacter.state == JUMP_STATE &&
+      gb.collideRectRect(xCharacter, yCharacter + aCharacter.vy, WIDTH_HERO, HEIGHT_HERO, xPlatform, yPlatform, widthPlatform * aPlatform.lengthPlatform, heightPlatform)
+    )
+  {
+    return aPlatform.id;
+  } else {
+
+    if( (aCharacter.y + UNDER_CENTER_Y_HERO + aCharacter.vy) >= yPlatform ) {
+      return gb.collideRectRect(xCharacter, yCharacter + aCharacter.vy, WIDTH_HERO, HEIGHT_HERO, xPlatform, yPlatform - 1, widthPlatform * aPlatform.lengthPlatform, heightPlatform) ? aPlatform.id : NO_ID;
+    }
+    
+  }
+
+  return NO_ID;
+}
+```
+
+In `PhysicsEngine.h`, let's modify the prototype of the `isOnOnePlatform` function to pass it a set of platforms as parameters, i.e. :
+
+<div class="filename" >PhysicsEngine.h</div>
+```
+const uint8_t isOnOnePlatform(
+  const Character &aCharacter, 
+  Platform * aSetOfPlatforms
+);
+```
+
+Modify the code of the function `isOnOnePlatform` (in `PhysicsEngine.cpp`) :
+
+<div class="filename" >PhysicsEngine.cpp <span>/!\ Horizontal scrolling /!\</span></div>
+```
+// Allows to detect a collision with a platform
+const uint8_t isOnOnePlatform(const Character &aCharacter, Platform * aSetOfPlatforms) {
+  for(uint8_t i = 0 ; i < NB_OF_PLATFORMS ; i++) {
+    const uint8_t platformId = isOnThePlatform(aCharacter, aSetOfPlatforms[i]);
+    if(platformId != NO_ID) {
+      return platformId;
+    }
+  }
+  return NO_ID ;
+}
+```
+
+As you can see, the `isOnOnePlatform` function scans all platforms, and if it detects a collision then it returns the identifier of the platform with which the character is in collision.
+
+Let's now make a modification to the `rectifyPositionY` function, we will add a parameter, which will be a platform, to correct the `y` position according to the platform with which the player is in contact.
+
+It is necessary to include `Platform.h` in `Character.h`.
+
+In `Character.h`, let's modify the prototype of the `rectifyPositionY` function :
+
+<div class="filename" >Character.h</div>
+```
+void rectifyPositionY(Character &aCharacter, Platform &aPlatform);
+```
+
+And let's adapt the code of the function `rectifyPositionY` :
+
+<div class="filename" >Character.cpp <span>/!\ Horizontal scrolling /!\</span></div>
+```
+// Correct the position y
+void rectifyPositionY(Character &aCharacter, Platform &aPlatform) {
+  int8_t overCenterY = OVER_CENTER_Y_PLATFORM;
+  switch(aPlatform.type) {
+    case GROUND_TYPE:
+      overCenterY = OVER_CENTER_Y_GROUND;
+      break;
+  }
+  aCharacter.y = (aPlatform.y - (UNDER_CENTER_Y_HERO + overCenterY));
+}
+```
+
+Let's adapt the `gravity` function.
+
+In `PhysicsEngine.h`, let's modify the prototype of the `gravity` function such that :
+
+<div class="filename" >PhysicsEngine.h</div>
+```
+void gravity(Character &aCharacter, Platform * aSetOfPlatforms);
+```
+
+In `PhysicsEngine.cpp`, let's modify the `gravity` function such that :
+
+<div class="filename" >PhysicsEngine.cpp <span>/!\ Horizontal scrolling /!\</span></div>
+```
+// Free fall
+void gravity(Character &aCharacter, Platform * aSetOfPlatforms) {
+
+  const uint8_t platformId = isOnOnePlatform(aCharacter, aSetOfPlatforms);
+  if( platformId == NO_ID ) {
+    /* ... */
+  } else {
+    Platform aPlatform = getPlatformFromId(platformId, aSetOfPlatforms);
+    rectifyPositionY(aCharacter, aPlatform);
+    /* ... */
+  }
+  
+}
+```
+
+In the same way, let's modify the prototype of the `jump` function, in `PhysicsEngine.h`, such that :
+
+<div class="filename" >PhysicsEngine.h</div>
+```
+void jump(Character &aCharacter, Platform * aSetOfPlatforms);
+```
+
+In `PhysicsEngine.h`, let's modify the `jump` function :
+
+<div class="filename" >PhysicsEngine.h <span>/!\ Horizontal scrolling /!\</span></div>
+```
+// Implementation of the character jump
+void jump(Character &aCharacter, Platform * aSetOfPlatforms) {
+  const uint8_t platformId = isOnOnePlatform(aCharacter, aSetOfPlatforms);
+
+  if(aCharacter.state == PUSH_FOR_JUMP_STATE) {
+    /* Unchanged... */
+  } else if( platformId != NO_ID) {
+    // If you are in contact with a platform
+
+    Platform aPlatform = getPlatformFromId(platformId, aSetOfPlatforms);
+
+    if(aPlatform.isGoThrough || (isFall(aCharacter) && aCharacter.y <= aPlatform.y) || aPlatform.type == GROUND_TYPE) {
+      rectifyPositionY(aCharacter, aPlatform);
+      aCharacter.vy = 0;
+      aCharacter.state = ON_THE_PLATFORM_STATE;
+    } else {
+      aCharacter.vy = 0;
+      jumpMovement(aCharacter);
+    }
+    
+  } else if( isOutOfWorld(aCharacter) ) {
+    /* Unchanged... */
+  } else {
+    /* Unchanged... */
+  }
+  
+}
+```
+
+Finally, in the main program, let's make some changes in the code corresponding to the `PLAY_STATE` state :
+
+<div class="filename" >GBPlatformer01.ino <span>/!\ Horizontal scrolling /!\</span></div>
+```
+void loop() {
+  // waiting loop
+  gb.waitForUpdate();
+
+  // clear screen
+  gb.display.clear();
+
+  switch(stateOfGame) {
+    case HOME_STATE:
+      stateOfGame = paintMenu();
+      break;
+    case LAUNCH_PLAY_STATE:
+      // ...
+      break;
+    case PLAY_STATE:
+      if(hero.state == ON_THE_PLATFORM_STATE) {
+        stateOfGame = manageCommands(hero);
+      }
+
+      if(hero.state != JUMP_STATE && hero.state != PUSH_FOR_JUMP_STATE) {
+        gravity(hero, setOfPlatforms);
+      } else if(hero.state == JUMP_STATE || hero.state == PUSH_FOR_JUMP_STATE) {
+        jump(hero, setOfPlatforms);
+      }
+
+      paint(hero);
+      break;
+    default:
+      gb.display.println("Votre message");
+  }
+)
+```
+
+Upload your porgram to the console, and have fun jumping on the platforms. If you have kept the values provided in this step, both the colors and the position of the platforms, you can be below the light green platform and jump, thus climbing on it.
+
+![Display of platforms, with collision management](./../../img/E03/platformes_avec_collisions_v1.gif)
+
+## Conclusion
+
+You have reached the end of this third step : where we have added free fall and platform management.
+
+If you have finished or are having problems you can download the solution <a href="https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v3.0.zip" class="external-link" >here</a>.
+
+In the next step, the fourth, we will discuss interactions with the world. We will see how to add objects like keys and a door.
+
+Feel free to give me a feedback : the improvements you would make (an outside look is always welcome), the things you didn't understand, the mistakes, etc. To leave a feedback, please add a comment to the following creation :
+
+{% include react-btn.html %}
