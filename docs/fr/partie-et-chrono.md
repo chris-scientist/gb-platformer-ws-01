@@ -15,7 +15,6 @@ Dans cette cinquième étape, nous allons implémenter : la fin de partie, un ch
 
 *Je vous invite à télécharger <a href="https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v4.0.zip" class="external-link" >le code</a> qui est le résultat de la quatrième étape afin de partir sur des bases communes.*
 
-
 ## Fin de partie
 
 Dans le fichier `Constants.h` ajoutons la constante `GAME_IS_FINISH_STATE`, un nouvel état indiquant que le jeu est fini :
@@ -27,7 +26,7 @@ const uint8_t GAME_IS_FINISH_STATE = 4;
 
 Créons le fichier `Game.h` où nous placerons les fonctions relatives à la gestion de la partie. 
 A cette étape d'avancement, une partie est terminée lorsque la porte est ouverte. 
-Ajoutons donc dans le fichier Game.h la fonction `isEndOfGame`  qui permettra de déterminer si la partie est terminée. 
+Ajoutons donc dans le fichier `Game.h` la fonction `isEndOfGame`  qui permettra de déterminer si la partie est terminée.
 
 Voici le contenu du fichier :
 
@@ -731,7 +730,7 @@ Vous pouvez téléverser le programme vers votre console, vous constaterez alors
 
 Attention dans la capture ci-dessous le chronomètre ne démarre pas à zéro ! C'est parce que je lance manuellement la capture et donc le temps c'est écoulé entre le début réel de la partie puis le début de la capture.
 
-![Ajout du chonomètre](./../../img/E05/chrono_v1.gif)
+![Ajout du chronomètre](./../../img/E05/chrono_v1.gif)
 
 ## Game over
 
