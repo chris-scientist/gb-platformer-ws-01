@@ -891,5 +891,5 @@ N'hésitez pas à me faire un retour sur cette étape et sur le workshop :
 
 {% include react-btn.html %}
 
-Vous voici arrivés à la fin de ce workshop, mais restez dans le coin pour réaliser d'autres workshops en attendant la suite de celui-ci.
+Vous voici arrivés à la fin de ce workshop, mais restez dans le coin pour réaliser d'autres workshops en attendant la suite de celui-ci. *Ne soyez pas trop impatient de voir la suite de ce workshop, en effet j'ai écris celui-ci en plus de 6 mois.*
 C'est en forgeant que l'on devient forgeron ;)
