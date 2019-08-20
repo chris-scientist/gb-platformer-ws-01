@@ -27,7 +27,6 @@ Nous allons fixer la règle suivante : si le temps de la partie courante et éga
 
 Les spécifications étant maintenant définies, passons à la structuration des données.
 
-
 ## Comment se définit un meilleur score ?
 
 Nous allons créer deux structures de données pour gérer nos meilleurs scores.
@@ -80,7 +79,6 @@ struct HighScoreManager {
 
 #endif
 ```
-
 
 ## Ajouter les fonctionnalités
 
@@ -185,7 +183,6 @@ const uint16_t NAME_HIGH_SCORE_3_BLOCK = 5;
 const uint16_t SCORE_HIGH_SCORE_3_BLOCK = 6;
 ```
 
-
 Dans `HighScoreManager.h`, créons la fonction `loadHighScore` :
 
 <div class="filename" >HighScoreManager.h</div>
@@ -196,7 +193,6 @@ void loadHighScore(
   uint16_t aBlockScore
 );
 ```
-
 
 Dans `HighScoreManager.cpp`, définissons la fonction `loadHighScore` :
 
@@ -262,7 +258,6 @@ void setup() {
   stateOfGame = HOME_STATE;
 }
 ```
-
 
 ### Réinitialiser le gestionnaire
 
