@@ -13,7 +13,7 @@ lang: fr
 
 Dans cette cinquième étape, nous allons implémenter : la fin de partie, un chronomètre et un écran de fin de partie et nous gérerons le "Game over" : la fin de partie lorsque le temps maximum autorisé pour compléter le niveau a été dépassé.
 
-*Je vous invite à télécharger <a href="https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v4.0.zip" class="external-link" >le code</a> qui est le résultat de la quatrième étape afin de partir sur des bases communes.*
+<!--*Je vous invite à télécharger <a href="#" class="external-link" >le code</a> qui est le résultat de la quatrième étape afin de partir sur des bases communes.*-->
 
 ## Fin de partie
 
@@ -1063,7 +1063,7 @@ Vous pouvez téléverser le programme vers votre console, le dernier ajout c'est
 
 Vous voici arrivé à la fin de cette cinquième étape où nous avons ajouté la gestion de la partie.
 
-Si vous avez terminé ou si vous rencontrez des problèmes vous pouvez télécharger la solution <a href="https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v5.0.zip" class="external-link" >ici</a>.
+<!--Si vous avez terminé ou si vous rencontrez des problèmes vous pouvez télécharger la solution <a href="#" class="external-link" >ici</a>.-->
 
 Dans la prochaine et dernière étape, c'est-à-dire la sixième, nous aborderons la gestion d'un tableau de meilleurs scores.
 

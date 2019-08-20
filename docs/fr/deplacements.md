@@ -16,7 +16,7 @@ Dans cette deuxième étape, nous allons animer le personnage en implémentant l
 * aller à gauche ;
 * sauter.
 
-*Je vous invite à télécharger <a href="https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v1.0.zip" class="external-link" >le code</a> qui est le résultat de la première étape afin de partir sur des bases communes.*
+<!--*Je vous invite à télécharger <a href="#" class="external-link" title="Bientôt disponible !" >le code</a> qui est le résultat de la première étape afin de partir sur des bases communes.*-->
 
 ## Avancer à droite ou à gauche
 
@@ -521,7 +521,7 @@ Et voici le saut actuel (après callibrage) :
 
 Vous voici arrivé à la fin de cette deuxième étape où nous avons ajouté les déplacements pour le personnage : avancer à gauche, avancer à droite et sauter.
 
-Si vous avez terminé ou si vous rencontrez des problèmes vous pouvez télécharger la solution <a href="#" class="external-link" >ici</a>.
+<!--Si vous avez terminé ou si vous rencontrez des problèmes vous pouvez télécharger la solution <a href="#" class="external-link" >ici</a>.-->
 
 Dans la prochaine étape, c'est-à-dire la troisième, nous aborderons la gestion des plateformes de la création à l'affichage, en passant par la gestion des collisions. Et nous implémenterons également la chute libre.
 

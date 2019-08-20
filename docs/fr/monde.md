@@ -13,7 +13,7 @@ lang: fr
 
 Pour cette quatrième étape nous allons implémenter les interactions avec le monde. Il y a aura une clé à ramasser, celle-ci permettra d'ouvrir une porte.
 
-*Je vous invite à télécharger <a href="https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v3.0.zip" class="external-link" >le code</a> qui est le résultat de la troisième étape afin de partir sur des bases communes.*
+<!--*Je vous invite à télécharger <a href="#" class="external-link" >le code</a> qui est le résultat de la troisième étape afin de partir sur des bases communes.*-->
 
 ## Les objets
 
@@ -486,7 +486,7 @@ Téléversez votre programme sur votre console, et constatez maintenant que vous
 
 Vous voici arrivé à la fin de cette quatrième étape : nous avons créé, affiché et interagi avec les objets.
 
-Si vous avez terminé ou si vous rencontrez des problèmes vous pouvez télécharger la solution <a href="https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v4.0.zip" class="external-link" >ici</a>.
+<!--Si vous avez terminé ou si vous rencontrez des problèmes vous pouvez télécharger la solution <a href="#" class="external-link" >ici</a>.-->
 
 Dans la prochaine étape, c'est-à-dire la cinquième, nous aborderons la gestion de la partie et nous ajouterons un chronomètre.
 

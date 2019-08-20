@@ -15,7 +15,7 @@ Dans cette troisième étape, nous allons implémenter :
 * la chute libre ;
 * et la gestion des plateformes.
 
-*Je vous invite à télécharger <a href="https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v2.0.zip" class="external-link" >le code</a> qui est le résultat de la deuxième étape afin de partir sur des bases communes.*
+<!--*Je vous invite à télécharger <a href="#" class="external-link" >le code</a> qui est le résultat de la deuxième étape afin de partir sur des bases communes.*-->
 
 ## Chute libre
 
@@ -725,7 +725,7 @@ Téléversez votre porgramme vers la console, et amusez-vous à sauter sur les p
 
 Vous voici arrivé à la fin de cette troisième étape : où nous avons ajouté la chute libre et la gestion des plateformes.
 
-Si vous avez terminé ou si vous rencontrez des problèmes vous pouvez télécharger la solution <a href="https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v3.0.zip" class="external-link" >ici</a>.
+<!--Si vous avez terminé ou si vous rencontrez des problèmes vous pouvez télécharger la solution <a href="#" class="external-link" >ici</a>.-->
 
 Dans la prochaine étape, c'est-à-dire la quatrième, nous aborderons les interactions avec le monde. Nous allons ainsi voir comment ajouter des objets comme des clés et une porte.
 

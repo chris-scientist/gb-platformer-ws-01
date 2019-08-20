@@ -61,7 +61,7 @@ Téléversez votre programme pour constater l'affichage du message, voici le ré
 
 ![Programme de base](./../../img/E01/home_screen_v1.png)
 
-Vous pouvez télécharger <a href="https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v0.0.zip" class="external-link" >ici le programme de base</a>.
+<!--Vous pouvez télécharger <a href="#" class="external-link" >ici le programme de base</a>.-->
 
 ## Le personnage
 
@@ -570,7 +570,7 @@ Vous pouvez téléverser votre programme sur la console, vous aurez au démarrag
 
 Vous voici arrivé à la fin de cette première étape : nous avons créé et affiché un personnage et nous avons géré les commandes basiques pour naviguer dans notre jeu, en partie grâce à un menu.
 
-Si vous avez terminé ou si vous rencontrez des problèmes vous pouvez télécharger la solution <a href="https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v1.0.zip" class="external-link" >ici</a>.
+<!--Si vous avez terminé ou si vous rencontrez des problèmes vous pouvez télécharger la solution <a href="#" class="external-link" >ici</a>.-->
 
 Dans la prochaine étape, c'est-à-dire la deuxième, nous aborderons les déplacements du personnage.
 

@@ -13,7 +13,7 @@ lang: fr
 
 Dans cette sixième et dernière étape, nous allons implémenter : la gestion des meilleurs scores, avec les interfaces nécessaires à l'ajout de cette fonctionnalité.
 
-*Je vous invite à télécharger <a href="https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v5.0.zip" class="external-link" >le code</a> qui est le résultat de la cinquième étape afin de partir sur des bases communes.*
+<!--*Je vous invite à télécharger <a href="#" class="external-link" >le code</a> qui est le résultat de la cinquième étape afin de partir sur des bases communes.*-->
 
 ## Quelques spécifications
 
@@ -880,11 +880,12 @@ Pensez à téléverser le programme vers votre console pour tester cette derniè
 
 ## Conclusion
 
-Vous pouvez télécharger le <a href="https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v6.0.zip" class="external-link" >code source final</a>. Vous avez maintenant un jeu de plateformes complet ! Oui c'est pas transcendant au niveau des graphiques mais soyez patient, nous verrons cela ultérieurement, mais (spoiler alerte) ce ne sera pas l'objectif du prochain workshop. Le but avec ce premier workshop était de poser les bases d'un jeu de plateformes, mais ce n'est que le début d'une série...
+<!--Vous pouvez télécharger le <a href="#" class="external-link" >code source final</a>.--> Vous avez maintenant un jeu de plateformes complet ! Oui c'est pas transcendant au niveau des graphismes mais soyez patient, nous verrons cela ultérieurement, mais (spoiler alerte) ce ne sera pas l'objectif du prochain workshop. Le but avec ce premier workshop était de poser les bases d'un jeu de plateformes, mais ce n'est que le début d'une série...
 
 N'hésitez pas à me faire un retour sur cette étape et sur le workshop : 
 
 {% include react-btn.html %}
 
 Vous voici arrivés à la fin de ce workshop, mais restez dans le coin pour réaliser d'autres workshops en attendant la suite de celui-ci. *Ne soyez pas trop impatient de voir la suite de ce workshop, en effet j'ai écris celui-ci en plus de 6 mois.*
+
 C'est en forgeant que l'on devient forgeron ;)
