@@ -677,7 +677,6 @@ bool saveScoreIfNewHighScore(HighScoreManager &aManager, const int32_t aTimeOfPa
 
 C'est cette dernière fonction que nous appelerons dans le programme principal. Nous verrons où et comment un peu plus tard dans cette étape. Voyons d'abord quelles sont les fonctions nécessaires pour l'affichage des meilleurs scores.
 
-
 ### Gérer l'affichage des meilleurs scores
 
 Pour gérer l'affichage, nous allons avoir besoin d'une fonction qui retourne le meilleur score associé à l'index. Voici le prototype de cette fonction à écrire dans `HighScoreManager.h` :
@@ -784,7 +783,6 @@ void paintHighScoreWindow(const HighScoreManager& aScoreManager) {
 }
 ```
 
-
 ### Finaliser la gestion des meilleurs scores
 
 Pour commencer, ajoutons un nouvel état dans `Constants.h` :
@@ -876,7 +874,6 @@ const uint8_t paintMenu() {
 ```
 
 Pensez à téléverser le programme vers votre console pour tester cette dernière fonctionnalité.
-
 
 ## Conclusion
 
