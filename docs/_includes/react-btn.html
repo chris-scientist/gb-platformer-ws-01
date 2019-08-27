@@ -1,5 +1,1 @@
-{% if site.wip %}
-<span class="btn btn-secondary" >{% if page.lang == 'fr' %}Indisponible pour le moment{% else %}Unviailable for now{% endif %}</span>
-{% else %}
-<a href="{{ site.comment-link }}" role="button" class="btn btn-secondary" >{% if page.lang == 'fr' %}Réagissez ici !{% else %}React here !{% endif %}</a>
-{% endif %}
+{% if page.lang == 'fr' %}{% include react-btn.fr.html %}{% else %}{% include react-btn.en.html %}{% endif %}
