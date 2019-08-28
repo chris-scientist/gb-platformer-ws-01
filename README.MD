@@ -5,10 +5,10 @@
 
 ## Description
 
-Sujet : les bases du jeu de plateformes
-Plateforme : Gamebuino META
-Langage : C++
-Version disponible : français et anglais
+* Sujet : les bases du jeu de plateformes
+* Plateforme : Gamebuino META
+* Langage : C++
+* Version disponible : français et anglais
 
 ## Historique des modifications
 
