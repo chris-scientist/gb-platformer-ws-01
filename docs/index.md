@@ -53,8 +53,7 @@ permalink: /
 		</div>
 		<div class="col-sm-6" >
 			<p class="lead" >
-				<!--<a href="{{ site.url }}/en/introduction/" role="button" class="btn btn-secondary" >Start</a>-->
-				<span class="btn btn-secondary" >Ongoing translation !</span> 
+				<a href="{{ site.url }}/en/introduction/" role="button" class="btn btn-secondary" >Start</a>
 			</p>
 		</div>
 	</div>

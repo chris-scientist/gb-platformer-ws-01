@@ -16,7 +16,7 @@ In this second step, we will animate the character by implementing the moves :
 * go left ;
 * jump.
 
-*I invite you to download <a href="https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v1.0.zip" class="external-link" >the code</a> which is the result of the first step in order to start on a common basis.*
+<!--*I invite you to download <a href="#" class="external-link" >the code</a> which is the result of the first step in order to start on a common basis.*-->
 
 ## Move to the right or left
 
@@ -519,7 +519,7 @@ And here is the current jump (after callibration) :
 
 You are at the end of this second step where we have added the moves for the character : move left, move right and jump.
 
-If you have finished or are having problems you can download the solution <a href="#" class="external-link" >here</a>.
+<!--If you have finished or are having problems you can download the solution <a href="#" class="external-link" >here</a>.-->
 
 In the next step, i.e. the third, we will address platform management from creation to display, including collision management. And we will also implement free fall.
 

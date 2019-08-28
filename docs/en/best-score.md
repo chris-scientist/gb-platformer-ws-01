@@ -13,7 +13,7 @@ lang: en
 
 In this sixth and final step, we will implement : the management of high scores, with the necessary interfaces to add this functionality.
 
-I invite you to download <a href="https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v5.0.zip" class="external-link" >the code</a> that is the result of the fifth step in order to start on a common basis.
+<!--I invite you to download <a href="#" class="external-link" >the code</a> that is the result of the fifth step in order to start on a common basis.-->
 
 ## Some specifications
 

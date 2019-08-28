@@ -15,7 +15,7 @@ In this third step, we will implement:
 * the free fall;
 * and platform management.
 
-*I invite you to download <a href="https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v2.0.zip" class="external-link" >the code</a> which is the result of the second step in order to start on a common basis.*
+<!--*I invite you to download <a href="#" class="external-link" >the code</a> which is the result of the second step in order to start on a common basis.*-->
 
 ## Free fall
 
@@ -716,7 +716,7 @@ Upload your porgram to the console, and have fun jumping on the platforms. If yo
 
 You have reached the end of this third step : where we have added free fall and platform management.
 
-If you have finished or are having problems you can download the solution <a href="https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v3.0.zip" class="external-link" >here</a>.
+<!--If you have finished or are having problems you can download the solution <a href=#" class="external-link" >here</a>.-->
 
 In the next step, the fourth, we will discuss interactions with the world. We will see how to add objects like keys and a door.
 

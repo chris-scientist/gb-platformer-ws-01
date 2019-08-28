@@ -13,7 +13,7 @@ lang: en
 
 For this fourth step we will implement interactions with the world. There will be a key to pick up, this one will open a door.
 
-*I invite you to download <a href="https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v3.0.zip" class="external-link" >the code</a> which is the result of the third step in order to start on a common basis.*
+<!--*I invite you to download <a href="#" class="external-link" >the code</a> which is the result of the third step in order to start on a common basis.*-->
 
 ## The objects
 
@@ -486,7 +486,7 @@ Upload your program to your console, and now find that you can pick up the key a
 
 You have reached the end of this fourth step : we have created, displayed and interacted with objects.
 
-If you have finished or are having problems you can download the solution <a href="https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v4.0.zip" class="external-link" >here</a>.
+<!--If you have finished or are having problems you can download the solution <a href="#" class="external-link" >here</a>.-->
 
 In the next step, i.e. the fifth step, we will approach the management of the game and add a timer.
 

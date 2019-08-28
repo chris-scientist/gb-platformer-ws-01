@@ -59,7 +59,7 @@ Upload your program to see the message displayed, here is the result :
 
 ![Basic program](./../../img/E01/home_screen_v1.png)
 
-You can download <a href="https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v0.0.zip" class="external-link" >here the basic program</a>.
+<!--You can download <a href="#" class="external-link" >here the basic program</a>.-->
 
 ## The character
 
@@ -565,7 +565,7 @@ You can upload your program to the console, you will have a menu with the item "
 
 You have reached the end of this first step : we have created and displayed a character and we have managed the basic commands to navigate in our game, partly through a menu.
 
-If you have finished or are having problems you can download the solution <a href="https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v1.0.zip" class="external-link" >here</a>.
+<!--If you have finished or are having problems you can download the solution <a href="#" class="external-link" >here</a>.-->
 
 In the next step, i.e. the second, we will discuss the character's movements.
 

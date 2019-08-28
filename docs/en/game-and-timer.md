@@ -13,7 +13,7 @@ lang: en
 
 In this fifth step, we will implement : the end of the game, a timer and an end of game screen and we will manage the "Game over" : the end of the game when the maximum time allowed to complete the level has been exceeded.
 
-*I invite you to download <a href="https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v4.0.zip" class="external-link" >the code</a> which is the result of the fourth step in order to start on a common basis.*
+<!--*I invite you to download <a href="#" class="external-link" >the code</a> which is the result of the fourth step in order to start on a common basis.*-->
 
 ## End of the game
 
@@ -1063,7 +1063,7 @@ You can upload the program to your console, the last addition is the pause scree
 
 You have reached the end of this fifth step where we have added game management.
 
-If you have finished or are having problems you can download the solution <a href="https://github.com/chris-scientist/gb-platformer-workshop-01/archive/v5.0.zip" class="external-link" >here</a>.
+<!--If you have finished or are having problems you can download the solution <a href="#" class="external-link" >here</a>.-->
 
 In the next and last step, i.e. the sixth, we will discuss the management of a high score table.
 
