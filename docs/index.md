@@ -8,7 +8,7 @@ permalink: /
 	<div class="row" >
 		<div class="col-sm-12" >
 			<p>
-				Ce workshop est écrit pour la <strong class="text-1" >Gamebuino META</strong>, vous développerez un jeu de platformes en <strong class="text-1" >C++</strong>.
+				Ce workshop est écrit pour la <strong class="text-1" >Gamebuino META</strong>, vous développerez un jeu de platformes en <strong class="text-1" >C++</strong>. Bonne lecture !
 			</p>
 		</div>
 	</div>
