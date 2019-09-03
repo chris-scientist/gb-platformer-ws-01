@@ -6,6 +6,13 @@ permalink: /
 
 <div class="container home" >
 	<div class="row" >
+		<div class="col-sm-12" >
+			<p>
+				Ce workshop est écrit pour la <strong class="text-1" >Gamebuino META</strong>, vous développerez un jeu de platformes en <strong class="text-1" >C++</strong>.
+			</p>
+		</div>
+	</div>
+	<div class="row" >
 		<div class="col-sm-6" >
 			<h2>[ Français ]</h2>
 		</div>
