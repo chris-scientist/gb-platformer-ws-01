@@ -22,4 +22,4 @@ And finally, thank you to Aurélien and her team without whom this would not be 
 
 For more workshops, you can to go on :
 
-<a href="https://chris-scientist.github.io/gamebuino/" role="button" class="btn btn-secondary" >Gamebuino backup website/a>
+<a href="https://chris-scientist.github.io/gamebuino/" role="button" class="btn btn-secondary" >Gamebuino backup website</a>
