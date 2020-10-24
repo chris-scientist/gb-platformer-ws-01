@@ -1,6 +1,6 @@
 ---
 layout: about
-title: Créations
+title: "A propos"
 permalink: /about/
 ---
 
