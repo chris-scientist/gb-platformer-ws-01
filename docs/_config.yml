@@ -7,8 +7,8 @@ baseurl: ""
 url: "https://chris-scientist.github.io/gb-platformer-ws-01"
 wip: false
 comment-link:
-  fr: "https://community.gamebuino.com/t/platformers-les-bases/935"
-  en: "https://community.gamebuino.com/t/platformers-the-basis/944"
+  fr: "https://chris-scientist.github.io/gb-platformer-ws-01/fr/feedback/"
+  en: "https://chris-scientist.github.io/gb-platformer-ws-01/en/feedback/"
 timezone: Europe/Paris
 
 # Build settings
