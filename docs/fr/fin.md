@@ -14,12 +14,12 @@ Vous pouvez réagir sur la page dédié à ce workshop :
 {% include react-btn.html %}
 
 Je tiens à tenir ces quelques remerciements :
-* pour leurs conseils varier <a href="https://gamebuino.com/fr/@steph" class="external-link" >@Steph</a>, ainsi que <a href="https://gamebuino.com/fr/@sylvain" class="external-link" >@Sylvain</a> ;
-* pour leurs relecture <a href="https://gamebuino.com/fr/@jicehel" class="external-link" >@Jicehel</a> et <a href="https://gamebuino.com/fr/@Max" class="external-link" >@Max</a> ;
+* pour leurs conseils varier <a href="https://github.com/m1cr0lab" class="external-link" >@Steph</a>, ainsi que <a href="https://github.com/sylvainmillot" class="external-link" >@Sylvain</a> ;
+* pour leurs relecture <a href="https://github.com/Jicehel" class="external-link" >@Jicehel</a> et <a href="https://github.com/Maxibuino" class="external-link" >@Max</a> ;
 * à vous pour avoir pris le temps de lire ce workshop.
 
 Et enfin, merci à Aurélien et son équipe sans qui cela ne serait possible.
 
 Pour plus de workshops, vous pouvez visitez :
 
-<a href="https://gamebuino.com/fr/academy" role="button" class="btn btn-secondary" >gamebuino.com</a>
+<a href="https://chris-scientist.github.io/gamebuino/" role="button" class="btn btn-secondary" >sauvegarde du site web Gamebuino</a>
