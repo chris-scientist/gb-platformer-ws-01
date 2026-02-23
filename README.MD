@@ -1,7 +1,7 @@
 
 # Platformers : les bases - WS01
 
-[Lien vers le workshop](https://chris-scientist.github.io/gb-platformer-ws-01/)
+[Lien vers le workshop](https://gamebuino.cthubert.fr/learning/ws/platformer/fundamentals/) | [Ancienne adresse](https://chris-scientist.github.io/gb-platformer-ws-01/)
 
 ## Description
 
@@ -11,6 +11,10 @@
 * Version disponible : français et anglais
 
 ## Historique des modifications
+
+### Début 2026
+
+* Migration du contenu vers [gamebuino.cthubert.fr](https://gamebuino.cthubert.fr/)
 
 ### 28 Août 2019
 

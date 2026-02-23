@@ -6,9 +6,6 @@ description: >-
 baseurl: ""
 url: "https://chris-scientist.github.io/gb-platformer-ws-01"
 wip: false
-comment-link:
-  fr: "https://chris-scientist.github.io/gb-platformer-ws-01/fr/feedback/"
-  en: "https://chris-scientist.github.io/gb-platformer-ws-01/en/feedback/"
 timezone: Europe/Paris
 
 # Build settings
